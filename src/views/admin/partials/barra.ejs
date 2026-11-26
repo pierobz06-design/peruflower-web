@@ -1,0 +1,35 @@
+<%# Barra lateral del panel. Parámetro: seccion (resumen, pedidos, productos) %>
+<% const enlaces = [
+  { id: 'resumen', texto: 'Resumen', ruta: '/admin', icono: 'flor' },
+  { id: 'pedidos', texto: 'Pedidos', ruta: '/admin/pedidos', icono: 'regalo' },
+  { id: 'productos', texto: 'Productos', ruta: '/admin/productos', icono: 'camara' },
+]; %>
+<header class="admin-barra" data-admin-barra>
+  <div class="admin-barra__marca">
+    <img src="/img/iconos/logo-peru-flowers.webp" alt="Perú Flowers" width="394" height="128">
+    <span class="admin-barra__etiqueta">Panel</span>
+  </div>
+  <button class="admin-barra__menu" type="button" aria-label="Abrir menú del panel" aria-expanded="false" aria-controls="admin-navegacion" data-admin-menu>
+    <%- include('../../partials/icono', { nombre: 'menu' }) %>
+  </button>
+  <nav class="admin-barra__navegacion" id="admin-navegacion" aria-label="Menú del panel">
+    <ul>
+      <% for (const enlace of enlaces) { %>
+      <li>
+        <a class="admin-barra__enlace" href="<%= enlace.ruta %>" <%- seccion === enlace.id ? 'aria-current="page"' : '' %>>
+          <%- include('../../partials/icono', { nombre: enlace.icono }) %> <%= enlace.texto %>
+        </a>
+      </li>
+      <% } %>
+      <li><a class="admin-barra__enlace" href="/" target="_blank" rel="noopener"><%- include('../../partials/icono', { nombre: 'flecha-derecha' }) %> Ver tienda</a></li>
+    </ul>
+    <div class="admin-barra__usuario">
+      <span><%- include('../../partials/icono', { nombre: 'usuario' }) %> <%= adminActual.nombre %></span>
+      <form action="/admin/salir" method="post">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button class="boton boton--texto" type="submit">Cerrar sesión</button>
+      </form>
+    </div>
+  </nav>
+</header>
+<%- include('../../partials/avisos') %>

@@ -1,0 +1,95 @@
+<%- include('../partials/cabeza') %>
+<%- include('../partials/header') %>
+
+<main id="contenido">
+  <div class="contenedor">
+    <nav class="migas" aria-label="Ruta de navegación">
+      <ol>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="<%= crearEnlaceCatalogo({ ocasion: producto.categoria.slug }) %>"><%= producto.categoria.nombre %></a></li>
+        <li aria-current="page"><%= producto.nombre %></li>
+      </ol>
+    </nav>
+
+    <article class="detalle-producto">
+      <div class="detalle-producto__galeria">
+        <div class="zoom-imagen" data-zoom>
+          <img class="zoom-imagen__img" src="<%= producto.imagen %>" alt="<%= producto.nombre %>, arreglo floral de Perú Flowers" width="1080" height="1080" fetchpriority="high" decoding="async">
+        </div>
+        <% if (!producto.disponible) { %>
+        <span class="etiqueta etiqueta--agotado">Agotado</span>
+        <% } else if (producto.tieneOferta) { %>
+        <span class="etiqueta etiqueta--oferta">Oferta</span>
+        <% } %>
+      </div>
+
+      <div class="detalle-producto__info">
+        <ul class="detalle-producto__ocasiones" aria-label="Ocasiones">
+          <% for (const ocasion of producto.ocasiones) { %>
+          <li><a class="chip chip--suave" href="<%= crearEnlaceCatalogo({ ocasion: ocasion.slug }) %>"><%= ocasion.nombre %></a></li>
+          <% } %>
+        </ul>
+        <h1 class="detalle-producto__nombre"><%= producto.nombre %></h1>
+        <p class="detalle-producto__sku">Código: <%= producto.sku %></p>
+
+        <p class="precio precio--grande">
+          <% if (producto.tieneOferta) { %>
+          <span class="precio__anterior"><span class="oculto-visual">Antes </span><%= producto.precioRegularTexto %></span>
+          <% } %>
+          <span class="precio__actual"><%= producto.precioTexto %></span>
+        </p>
+
+        <p class="disponibilidad <%= producto.disponible ? 'disponibilidad--si' : 'disponibilidad--no' %>">
+          <%- include('../partials/icono', { nombre: producto.disponible ? 'check' : 'cerrar' }) %>
+          <%= producto.disponible ? 'Disponible para entrega' : 'Por ahora no está disponible' %>
+        </p>
+
+        <div class="detalle-producto__descripcion">
+          <h2 class="detalle-producto__subtitulo">¿Qué incluye?</h2>
+          <ul class="lista-caracteristicas">
+            <% for (const caracteristica of caracteristicas) { %>
+            <li><%- include('../partials/icono', { nombre: 'flor' }) %> <span><%= caracteristica %></span></li>
+            <% } %>
+          </ul>
+        </div>
+
+        <div class="detalle-producto__acciones">
+          <% if (producto.disponible) { %>
+          <form class="agregar-carrito" action="/api/carrito/items" method="post" data-form-agregar>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="hidden" name="productoId" value="<%= producto.id %>">
+            <div class="cantidad cantidad--grande" data-cantidad>
+              <button class="cantidad__boton" type="button" aria-label="Quitar uno" data-paso="-1">−</button>
+              <input class="cantidad__valor" type="number" name="cantidad" inputmode="numeric" min="1" max="20" value="1" aria-label="Cantidad">
+              <button class="cantidad__boton" type="button" aria-label="Agregar uno" data-paso="1">+</button>
+            </div>
+            <button class="boton boton--primario agregar-carrito__boton" type="submit">
+              <%- include('../partials/icono', { nombre: 'carrito' }) %> Agregar al carrito
+            </button>
+          </form>
+          <% } %>
+          <a class="boton boton--whatsapp boton--bloque" href="<%= enlaceWhatsapp %>" target="_blank" rel="noopener">
+            <%- include('../partials/icono', { nombre: 'whatsapp' }) %> Consultar este arreglo por WhatsApp
+          </a>
+        </div>
+
+        <ul class="detalle-producto__avisos">
+          <li><%- include('../partials/icono', { nombre: 'camion' }) %> <span><strong>Delivery a Lima y Callao.</strong> El costo se calcula según el distrito al hacer tu pedido.</span></li>
+          <li><%- include('../partials/icono', { nombre: 'regalo' }) %> <span><strong>Dedicatoria incluida.</strong> Escribe tu mensaje y lo imprimimos en una tarjeta.</span></li>
+          <li><%- include('../partials/icono', { nombre: 'camara' }) %> <span><strong>Foto real.</strong> Las flores pueden variar ligeramente según la temporada.</span></li>
+        </ul>
+      </div>
+    </article>
+  </div>
+
+  <% if (relacionados.length > 0) { %>
+  <section class="seccion seccion--rosa" aria-labelledby="titulo-relacionados">
+    <div class="contenedor">
+      <h2 class="titulo-seccion" id="titulo-relacionados">También te puede gustar</h2>
+      <%- include('../partials/carrusel-productos', { id: 'carrusel-relacionados', etiqueta: 'Productos relacionados', productos: relacionados }) %>
+    </div>
+  </section>
+  <% } %>
+</main>
+
+<%- include('../partials/cierre') %>

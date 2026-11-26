@@ -1,0 +1,69 @@
+/* Fuentes de la página actual de Perú Flowers, servidas desde el propio sitio (@fontsource). */
+@font-face {
+  font-family: 'Aboreto';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fuentes/aboreto/files/aboreto-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fuentes/quicksand/files/quicksand-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fuentes/quicksand/files/quicksand-latin-500-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fuentes/quicksand/files/quicksand-latin-600-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fuentes/quicksand/files/quicksand-latin-700-normal.woff2') format('woff2');
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--color-tinta);
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.titulo-seccion {
+  font-family: var(--fuente-titulos);
+  font-weight: 400;
+  font-size: var(--texto-2xl);
+  text-align: center;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.titulo-seccion--izquierda {
+  text-align: left;
+}
+
+.subtitulo-seccion {
+  max-width: 640px;
+  margin: 0 auto 2rem;
+  text-align: center;
+  color: var(--color-texto-suave);
+}

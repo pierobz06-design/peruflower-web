@@ -1,0 +1,407 @@
+/* Header fijo: franja blanca con el logo oficial y menú en el color de marca.
+   Se compacta al hacer scroll. */
+.encabezado {
+  position: sticky;
+  top: 0;
+  z-index: var(--capa-header);
+  border-bottom: 3px solid var(--color-primario);
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  transition: box-shadow var(--duracion) var(--curva);
+}
+
+.encabezado.es-compacto {
+  box-shadow: 0 8px 24px rgba(17, 24, 33, 0.18);
+}
+
+.encabezado__barra {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 12px;
+  transition: padding var(--duracion) var(--curva);
+}
+
+.encabezado.es-compacto .encabezado__barra {
+  padding-block: 6px;
+}
+
+.encabezado__izquierda,
+.encabezado__derecha {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.encabezado__derecha {
+  justify-content: flex-end;
+}
+
+.encabezado__aviso {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.encabezado__aviso .icono {
+  color: var(--color-primario);
+}
+
+/* Botones redondos del header: crecen y se tiñen al pasar el mouse */
+.encabezado__icono {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--color-tinta);
+  transition:
+    transform var(--duracion) var(--curva),
+    background-color var(--duracion) var(--curva),
+    color var(--duracion) var(--curva);
+}
+
+.encabezado__icono .icono {
+  width: 24px;
+  height: 24px;
+}
+
+.encabezado__icono:hover,
+.encabezado__icono[aria-expanded='true'] {
+  transform: scale(1.1);
+  background-color: var(--color-primario-suave);
+  color: var(--color-primario);
+}
+
+/* Logo oficial de Perú Flowers */
+.logo {
+  display: inline-flex;
+  align-items: center;
+}
+
+.logo__imagen {
+  width: auto;
+  height: 44px;
+  transition:
+    height var(--duracion) var(--curva),
+    transform var(--duracion) var(--curva);
+}
+
+.logo:hover .logo__imagen {
+  transform: scale(1.03);
+}
+
+/* Contador del carrito: late suavemente */
+.carrito-boton__contador {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border: 2px solid var(--color-blanco);
+  border-radius: var(--radio-pildora);
+  background: var(--color-primario);
+  color: var(--color-blanco);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  animation: latido 2s ease infinite;
+}
+
+/* Menú de cuenta */
+.cuenta {
+  position: relative;
+}
+
+.cuenta__menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 10;
+  min-width: 230px;
+  overflow: visible;
+  border-radius: var(--radio-sm);
+  background: var(--color-blanco);
+  color: var(--color-tinta);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px) scale(0.95);
+  transition:
+    opacity 0.4s var(--curva),
+    transform 0.4s var(--curva),
+    visibility 0.4s;
+}
+
+/* Flechita superior */
+.cuenta__menu::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 16px;
+  width: 16px;
+  height: 16px;
+  background: var(--color-primario);
+  transform: rotate(45deg);
+}
+
+.cuenta.es-abierto .cuenta__menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.cuenta__cabecera {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  padding: 18px 20px 14px;
+  border-radius: var(--radio-sm) var(--radio-sm) 0 0;
+  background: var(--degradado-primario);
+  color: var(--color-blanco);
+  font-size: var(--texto-sm);
+}
+
+.cuenta__cabecera::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cuenta__cabecera strong {
+  font-size: var(--texto-lg);
+}
+
+.cuenta__enlace {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  transition:
+    background var(--duracion-rapida),
+    padding var(--duracion-rapida);
+}
+
+.cuenta__enlace + .cuenta__enlace {
+  border-top: 1px solid var(--color-borde);
+}
+
+.cuenta.es-abierto .cuenta__enlace {
+  animation: deslizar-entrada 0.4s ease both;
+}
+
+.cuenta.es-abierto .cuenta__enlace:nth-of-type(2) {
+  animation-delay: 0.05s;
+}
+
+.cuenta.es-abierto .cuenta__enlace:nth-of-type(3) {
+  animation-delay: 0.1s;
+}
+
+/* Barra lateral y flecha que aparecen al pasar el mouse */
+.cuenta__enlace::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--color-primario);
+  transform: scaleY(0);
+  transition: transform var(--duracion-rapida);
+}
+
+.cuenta__enlace::after {
+  content: '→';
+  margin-left: auto;
+  color: var(--color-primario);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition:
+    opacity var(--duracion-rapida),
+    transform var(--duracion-rapida);
+}
+
+.cuenta__enlace:hover {
+  padding-left: 25px;
+  background: linear-gradient(90deg, var(--color-primario-suave) 0%, transparent 100%);
+}
+
+.cuenta__enlace:hover::before {
+  transform: scaleY(1);
+}
+
+.cuenta__enlace:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Navegación principal (solo computadora) */
+.navegacion {
+  display: none;
+  background: var(--degradado-primario);
+}
+
+.navegacion__lista {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.75rem;
+}
+
+.navegacion__enlace {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 12px 2px;
+  color: var(--color-blanco);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: opacity var(--duracion);
+}
+
+/* Subrayado que crece desde la izquierda */
+.navegacion__enlace::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 8px;
+  width: 0;
+  height: 2px;
+  background: var(--color-blanco);
+  transition: width var(--duracion) var(--curva);
+}
+
+.navegacion__enlace:hover::after,
+.navegacion__enlace:focus-visible::after,
+.navegacion__enlace[aria-current='page']::after {
+  width: 100%;
+}
+
+.navegacion__enlace .icono {
+  width: 1em;
+  height: 1em;
+  transition: transform var(--duracion);
+}
+
+.navegacion__boton[aria-expanded='true'] .icono {
+  transform: rotate(180deg);
+}
+
+.navegacion__item-desplegable {
+  position: relative;
+}
+
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 10;
+  min-width: 220px;
+  padding: 8px 0;
+  border-top: 3px solid var(--color-primario);
+  border-radius: 0 0 var(--radio-sm) var(--radio-sm);
+  background: var(--color-blanco);
+  box-shadow: var(--sombra-media);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 10px);
+  transition:
+    opacity var(--duracion) var(--curva),
+    transform var(--duracion) var(--curva),
+    visibility var(--duracion);
+}
+
+.navegacion__item-desplegable.es-abierto .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.submenu__enlace {
+  display: block;
+  padding: 10px 20px;
+  color: var(--color-tinta);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  transition:
+    background var(--duracion-rapida),
+    color var(--duracion-rapida),
+    padding var(--duracion-rapida);
+}
+
+.submenu__enlace:hover {
+  padding-left: 26px;
+  background: var(--color-primario);
+  color: var(--color-blanco);
+}
+
+@media (min-width: 1024px) {
+  .encabezado {
+    border-bottom: 0;
+  }
+
+  .encabezado__hamburguesa {
+    display: none;
+  }
+
+  .logo__imagen {
+    height: 64px;
+  }
+
+  .encabezado.es-compacto .logo__imagen {
+    height: 46px;
+  }
+
+  .encabezado__aviso {
+    display: inline-flex;
+  }
+
+  .navegacion {
+    display: block;
+  }
+
+  .encabezado.es-compacto .navegacion__enlace {
+    padding-block: 8px;
+  }
+
+  .encabezado.es-compacto .navegacion__enlace::after {
+    bottom: 4px;
+  }
+}
+
+@media (max-width: 479px) {
+  .logo__imagen {
+    height: 40px;
+  }
+
+  .encabezado__barra {
+    gap: 0.25rem;
+  }
+}
+
+.cuenta__menu form {
+  border-top: 1px solid var(--color-borde);
+}
+
+.cuenta__enlace--salir {
+  width: 100%;
+  color: var(--color-error);
+  text-align: left;
+}

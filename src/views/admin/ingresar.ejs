@@ -1,0 +1,22 @@
+<%- include('partials/cabeza') %>
+<main id="contenido" class="admin-ingreso">
+  <section class="admin-ingreso__tarjeta" aria-labelledby="titulo-admin">
+    <img class="admin-ingreso__logo" src="/img/iconos/logo-peru-flowers.webp" alt="Perú Flowers" width="394" height="128">
+    <h1 class="admin-ingreso__titulo" id="titulo-admin">Panel de administración</h1>
+    <p class="admin-ingreso__texto">Acceso exclusivo para el personal de Perú Flowers.</p>
+    <% if (error) { %>
+    <p class="alerta alerta--error" role="alert"><%= error %></p>
+    <% } %>
+    <form class="formulario" action="/admin/ingresar" method="post" novalidate data-validar>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="volver" value="<%= volver %>">
+      <%- include('../partials/campo-texto', { id: 'email', nombre: 'email', etiqueta: 'Correo', tipo: 'email', valor: email, error: null,
+            atributos: 'required maxlength="160" autocomplete="username"' }) %>
+      <%- include('../partials/campo-texto', { id: 'password', nombre: 'password', etiqueta: 'Contraseña', tipo: 'password', error: null,
+            atributos: 'required maxlength="72" autocomplete="current-password" data-mostrar-clave' }) %>
+      <button class="boton boton--primario boton--bloque" type="submit">Ingresar al panel</button>
+    </form>
+    <a class="boton boton--texto" href="/">← Volver a la tienda</a>
+  </section>
+</main>
+<%- include('partials/cierre') %>

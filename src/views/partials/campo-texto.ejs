@@ -1,0 +1,18 @@
+<%#
+  Campo de formulario con etiqueta, ayuda y mensaje de error (validado en el navegador y en el servidor).
+  Parámetros: id, nombre, etiqueta, tipo, valor, error, atributos (texto con atributos HTML extra), ayuda, opcional
+%>
+<% const idError = `error-${id}`; const idAyuda = `ayuda-${id}`; %>
+<div class="campo<%= error ? ' campo--error' : '' %>">
+  <label class="campo__etiqueta" for="<%= id %>">
+    <%= etiqueta %><% if (typeof opcional !== 'undefined' && opcional) { %> <span class="campo__opcional">(opcional)</span><% } %>
+  </label>
+  <input class="entrada" id="<%= id %>" name="<%= nombre %>" type="<%= typeof tipo !== 'undefined' ? tipo : 'text' %>"
+         value="<%= typeof valor !== 'undefined' && valor !== null ? valor : '' %>"
+         aria-describedby="<%= typeof ayuda !== 'undefined' && ayuda ? idAyuda + ' ' : '' %><%= idError %>"
+         <%- error ? 'aria-invalid="true"' : '' %> <%- typeof atributos !== 'undefined' ? atributos : '' %>>
+  <% if (typeof ayuda !== 'undefined' && ayuda) { %>
+  <p class="campo__ayuda" id="<%= idAyuda %>"><%= ayuda %></p>
+  <% } %>
+  <p class="campo__error" id="<%= idError %>" data-error-de="<%= id %>"><%= error || '' %></p>
+</div>

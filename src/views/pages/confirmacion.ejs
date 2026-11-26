@@ -1,0 +1,47 @@
+<%- include('../partials/cabeza') %>
+<%- include('../partials/header') %>
+<%
+  const pagado = pedido.estado === 'Pagado';
+  const mensajes = {
+    tarjeta: `Pago aprobado con la tarjeta terminada en ${pedido.tarjeta_ultimos4}. Ya estamos preparando tus flores.`,
+    yape: `Recibimos tu número de operación de Yape (${pedido.codigo_operacion}). Confirmaremos el pago y te avisaremos.`,
+    plin: `Recibimos tu número de operación de Plin (${pedido.codigo_operacion}). Confirmaremos el pago y te avisaremos.`,
+    whatsapp: 'Envíanos el mensaje por WhatsApp para coordinar el pago con nuestra recepcionista.',
+  };
+%>
+
+<main id="contenido" class="pagina-compra confirmacion">
+  <div class="confirmacion__petalos" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="contenedor">
+    <section class="tarjeta-compra confirmacion__cabecera" aria-labelledby="titulo-confirmacion">
+      <svg class="confirmacion__check" viewBox="0 0 52 52" aria-hidden="true" focusable="false">
+        <circle cx="26" cy="26" r="24" fill="none"/>
+        <path fill="none" d="M15 27l7 7 15-15"/>
+      </svg>
+      <h1 class="confirmacion__titulo" id="titulo-confirmacion"><%= pagado ? '¡Gracias por tu compra!' : '¡Pedido registrado!' %></h1>
+      <p class="confirmacion__codigo">Número de pedido <strong><%= pedido.codigo %></strong></p>
+      <p>Estado: <%- include('../partials/estado', { estado: pedido.estado }) %> · Método: <strong><%= pedido.metodoPagoTexto %></strong></p>
+      <p class="confirmacion__mensaje"><%= mensajes[pedido.metodo_pago] || 'Elige un método de pago para completar tu pedido.' %></p>
+      <div class="confirmacion__acciones">
+        <% if (enlaceWhatsappPedido) { %>
+        <a class="boton boton--whatsapp" href="<%= enlaceWhatsappPedido %>" target="_blank" rel="noopener">
+          <%- include('../partials/icono', { nombre: 'whatsapp' }) %> Enviar pedido por WhatsApp
+        </a>
+        <% } %>
+        <% if (!pedido.metodo_pago) { %>
+        <a class="boton boton--primario" href="/pedido/<%= pedido.codigo %>/pago">Elegir método de pago</a>
+        <% } %>
+        <a class="boton boton--contorno" href="/catalogo">Seguir comprando</a>
+      </div>
+    </section>
+
+    <section class="tarjeta-compra resumen-compra confirmacion__resumen" aria-labelledby="titulo-detalle">
+      <h2 class="resumen-compra__titulo" id="titulo-detalle">Detalle del pedido</h2>
+      <%- include('../partials/resumen-pedido', { pedido }) %>
+    </section>
+  </div>
+</main>
+
+<%- include('../partials/cierre') %>

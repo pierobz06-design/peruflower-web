@@ -1,0 +1,67 @@
+<%- include('../partials/cabeza') %>
+<%- include('../partials/header') %>
+<% const v = (campo) => valores[campo] || ''; %>
+
+<main id="contenido" class="pagina-cuenta">
+  <div class="contenedor pagina-cuenta__contenido">
+    <div class="pagina-cuenta__imagen" aria-hidden="true">
+      <img src="/img/banners/claveles-para-mama.webp" alt="" width="736" height="838" loading="lazy" decoding="async">
+      <p class="pagina-cuenta__frase">Crea tu cuenta y haz tu pedido en pocos pasos.</p>
+    </div>
+
+    <section class="tarjeta-formulario" aria-labelledby="titulo-registro">
+      <h1 class="tarjeta-formulario__titulo" id="titulo-registro">Crear cuenta</h1>
+      <p class="tarjeta-formulario__texto">¿Ya tienes cuenta? <a class="enlace" href="/ingresar<%= volver !== '/' ? '?volver=' + encodeURIComponent(volver) : '' %>">Inicia sesión</a></p>
+
+      <% if (errores.general) { %>
+      <p class="alerta alerta--error" role="alert"><%= errores.general %></p>
+      <% } %>
+
+      <form class="formulario" action="/registro" method="post" novalidate data-validar>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="volver" value="<%= volver %>">
+
+        <div class="formulario__fila">
+          <%- include('../partials/campo-texto', { id: 'nombres', nombre: 'nombres', etiqueta: 'Nombres', valor: v('nombres'), error: errores.nombres,
+                atributos: `required minlength="2" maxlength="80" autocomplete="given-name" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ' .\\-]+" data-mensaje-patron="Usa solo letras y espacios."` }) %>
+          <%- include('../partials/campo-texto', { id: 'apellidos', nombre: 'apellidos', etiqueta: 'Apellidos', valor: v('apellidos'), error: errores.apellidos,
+                atributos: `required minlength="2" maxlength="80" autocomplete="family-name" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ' .\\-]+" data-mensaje-patron="Usa solo letras y espacios."` }) %>
+        </div>
+        <%- include('../partials/campo-texto', { id: 'email', nombre: 'email', etiqueta: 'Correo electrónico', tipo: 'email', valor: v('email'), error: errores.email,
+              atributos: 'required maxlength="160" autocomplete="email" inputmode="email"' }) %>
+        <%- include('../partials/campo-texto', { id: 'telefono', nombre: 'telefono', etiqueta: 'Celular', tipo: 'tel', valor: v('telefono'), error: errores.telefono,
+              ayuda: '9 dígitos, por ejemplo 987654321.',
+              atributos: 'required inputmode="numeric" maxlength="9" autocomplete="tel-national" pattern="9[0-9]{8}" data-solo-digitos data-mensaje-patron="Escribe un celular de 9 dígitos que empiece con 9."' }) %>
+        <div class="formulario__fila">
+          <%- include('../partials/campo-texto', { id: 'password', nombre: 'password', etiqueta: 'Contraseña', tipo: 'password', error: errores.password,
+                ayuda: 'Mínimo 8 caracteres, con letras y números.',
+                atributos: 'required minlength="8" maxlength="72" autocomplete="new-password" pattern="(?=.*[A-Za-zÁÉÍÓÚÑáéíóúñ])(?=.*\\d).{8,72}" data-mensaje-patron="Usa al menos una letra y un número." data-mostrar-clave' }) %>
+          <%- include('../partials/campo-texto', { id: 'confirmarPassword', nombre: 'confirmarPassword', etiqueta: 'Repite la contraseña', tipo: 'password', error: errores.confirmarPassword,
+                atributos: 'required maxlength="72" autocomplete="new-password" data-coincide-con="password" data-mensaje-coincide="Las contraseñas no coinciden."' }) %>
+        </div>
+
+        <div class="casilla<%= errores.aceptaPrivacidad ? ' campo--error' : '' %>">
+          <input class="casilla__entrada" type="checkbox" id="aceptaPrivacidad" name="aceptaPrivacidad" value="si" required
+                 <%= v('aceptaPrivacidad') === 'si' ? 'checked' : '' %> aria-describedby="error-aceptaPrivacidad"
+                 data-mensaje-requerido="Para crear tu cuenta debes aceptar la política de privacidad.">
+          <label class="casilla__etiqueta" for="aceptaPrivacidad">
+            He leído y acepto la <a class="enlace" href="/politica-de-privacidad" target="_blank" rel="noopener">política de privacidad</a>
+            y autorizo el tratamiento de mis datos para gestionar mis pedidos (Ley N.° 29733). <span class="campo__obligatorio">Obligatorio</span>
+          </label>
+          <p class="campo__error" id="error-aceptaPrivacidad" data-error-de="aceptaPrivacidad"><%= errores.aceptaPrivacidad || '' %></p>
+        </div>
+
+        <div class="casilla">
+          <input class="casilla__entrada" type="checkbox" id="aceptaPromociones" name="aceptaPromociones" value="si" <%= v('aceptaPromociones') === 'si' ? 'checked' : '' %>>
+          <label class="casilla__etiqueta" for="aceptaPromociones">
+            Quiero recibir promociones de Perú Flowers por correo. Puedo darme de baja cuando quiera (Ley N.° 28493). <span class="campo__opcional">(opcional)</span>
+          </label>
+        </div>
+
+        <button class="boton boton--primario boton--bloque" type="submit">Crear mi cuenta</button>
+      </form>
+    </section>
+  </div>
+</main>
+
+<%- include('../partials/cierre') %>

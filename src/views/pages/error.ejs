@@ -1,0 +1,17 @@
+<%- include('../partials/cabeza') %>
+<%- include('../partials/header') %>
+
+<main id="contenido" class="pagina-error">
+  <div class="contenedor pagina-error__contenido">
+    <span class="pagina-error__icono"><%- include('../partials/icono', { nombre: 'flor' }) %></span>
+    <p class="pagina-error__codigo">Error <%= estado %></p>
+    <h1 class="pagina-error__titulo"><%= mensaje.titulo %></h1>
+    <p class="pagina-error__texto"><%= mensaje.texto %></p>
+    <div class="pagina-error__acciones">
+      <a class="boton boton--primario" href="/">Volver al inicio</a>
+      <a class="boton boton--contorno" href="/catalogo">Ver catálogo</a>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/cierre') %>

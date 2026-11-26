@@ -1,0 +1,137 @@
+/* Cómo comprar: tres pasos informativos (no son enlaces) */
+.como-comprar {
+  background: var(--color-blanco);
+}
+
+.como-comprar__pasos {
+  position: relative;
+  display: grid;
+  gap: 18px;
+  margin-top: 2rem;
+}
+
+.paso-compra {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 36px 24px 28px;
+  border-radius: var(--radio-md);
+  background: var(--color-rosa-50);
+  text-align: center;
+}
+
+.paso-compra__numero {
+  position: absolute;
+  top: -16px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 3px solid var(--color-blanco);
+  border-radius: 50%;
+  background: var(--degradado-primario);
+  color: var(--color-blanco);
+  font-weight: 700;
+}
+
+.paso-compra__icono {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-blanco);
+  color: var(--color-primario);
+}
+
+.paso-compra__icono .icono {
+  width: 30px;
+  height: 30px;
+}
+
+.paso-compra__titulo {
+  font-size: var(--texto-lg);
+}
+
+.paso-compra__texto {
+  max-width: 320px;
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+/* Nosotros */
+.nosotros {
+  padding-top: 0;
+}
+
+.nosotros__contenido {
+  display: grid;
+  gap: 32px;
+  align-items: center;
+}
+
+.nosotros__imagen {
+  overflow: hidden;
+  max-height: 520px;
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombra-media);
+}
+
+.nosotros__imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nosotros__texto {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+}
+
+.nosotros__texto .hero__antetitulo {
+  color: var(--color-primario);
+  margin: 0;
+}
+
+.nosotros__datos {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--color-texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.nosotros__datos li {
+  display: flex;
+  gap: 8px;
+}
+
+.nosotros__datos .icono {
+  color: var(--color-primario);
+}
+
+@media (min-width: 768px) {
+  .como-comprar__pasos {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  /* Línea punteada que une los tres pasos */
+  .como-comprar__pasos::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 16%;
+    left: 16%;
+    border-top: 2px dashed var(--color-rosa-200);
+  }
+}
+
+@media (min-width: 1024px) {
+  .nosotros__contenido {
+    grid-template-columns: 1fr 1.1fr;
+    gap: 64px;
+  }
+}

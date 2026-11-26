@@ -1,0 +1,26 @@
+<%# HU04: botón flotante de WhatsApp. En la página de producto el mensaje incluye el arreglo que se está viendo. %>
+<div class="whatsapp" data-whatsapp>
+  <div class="whatsapp__tarjeta" id="whatsapp-tarjeta" role="dialog" aria-labelledby="whatsapp-titulo" hidden data-whatsapp-tarjeta>
+    <div class="whatsapp__cabecera">
+      <p class="whatsapp__titulo" id="whatsapp-titulo">¿Te ayudamos a elegir?</p>
+      <p class="whatsapp__subtitulo">Te asesoramos según la ocasión y tu presupuesto.</p>
+      <button class="whatsapp__cerrar" type="button" aria-label="Cerrar" data-whatsapp-cerrar>
+        <%- include('icono', { nombre: 'cerrar' }) %>
+      </button>
+    </div>
+    <a class="whatsapp__contacto" href="<%= enlaceWhatsapp %>" target="_blank" rel="noopener">
+      <span class="whatsapp__avatar" aria-hidden="true">
+        <img src="/img/iconos/flor-peru-flowers.webp" alt="" width="256" height="256">
+      </span>
+      <span class="whatsapp__datos">
+        <strong>Atención Perú Flowers</strong>
+        <span>Ventas y asesoría</span>
+      </span>
+      <%- include('icono', { nombre: 'whatsapp', clase: 'whatsapp__icono-contacto' }) %>
+    </a>
+    <p class="whatsapp__nota">Se abrirá WhatsApp con tu mensaje listo para enviar.</p>
+  </div>
+  <button class="whatsapp__boton" type="button" aria-label="Pedir asesoría por WhatsApp" aria-expanded="false" aria-controls="whatsapp-tarjeta" data-whatsapp-boton>
+    <%- include('icono', { nombre: 'whatsapp' }) %>
+  </button>
+</div>

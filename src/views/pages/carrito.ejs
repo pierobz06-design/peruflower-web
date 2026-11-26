@@ -1,0 +1,35 @@
+<%- include('../partials/cabeza') %>
+<%- include('../partials/header') %>
+
+<main id="contenido" class="pagina-compra">
+  <div class="contenedor">
+    <%- include('../partials/pasos-compra', { actual: 1 }) %>
+    <h1 class="pagina-compra__titulo">Tu carrito</h1>
+
+    <div class="pagina-compra__distribucion">
+      <section class="tarjeta-compra" aria-label="Productos del carrito">
+        <div class="carrito-vacio" data-carrito-vacio <%- carrito.items.length > 0 ? 'hidden' : '' %>>
+          <%- include('../partials/icono', { nombre: 'carrito' }) %>
+          <p>Tu carrito está vacío.</p>
+          <a class="boton boton--primario" href="/catalogo">Elegir un arreglo</a>
+        </div>
+        <ul class="lista-carrito" data-carrito-lista>
+          <% for (const item of carrito.items) { %>
+          <%- include('../partials/item-carrito', { item, cantidadMaxima: carrito.cantidadMaxima }) %>
+          <% } %>
+        </ul>
+      </section>
+
+      <aside class="tarjeta-compra resumen-compra" aria-label="Resumen" data-carrito-con-items <%- carrito.items.length > 0 ? '' : 'hidden' %>>
+        <h2 class="resumen-compra__titulo">Resumen</h2>
+        <p class="resumen-compra__fila"><span>Productos (<span data-carrito-cantidad><%= carrito.cantidadTotal %></span>)</span> <strong data-carrito-subtotal><%= carrito.subtotalTexto %></strong></p>
+        <p class="resumen-compra__fila resumen-compra__fila--suave"><span>Envío</span> <span>Se calcula según el distrito</span></p>
+        <p class="alerta alerta--aviso" data-carrito-alerta-agotado <%- carrito.hayNoDisponibles ? '' : 'hidden' %>>Quita los arreglos que ya no están disponibles para continuar.</p>
+        <a class="boton boton--primario boton--bloque" href="/pedido/entrega" data-ir-a-pagar>Continuar con la entrega</a>
+        <a class="boton boton--texto boton--bloque" href="/catalogo">Seguir comprando</a>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/cierre') %>

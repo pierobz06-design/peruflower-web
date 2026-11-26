@@ -1,0 +1,54 @@
+<footer class="pie">
+  <div class="pie__contenido contenedor">
+    <div class="pie__marca">
+      <%- include('logo', { clase: 'logo--claro' }) %>
+      <p class="pie__texto">Florería familiar en Salamanca de Monterrico. Preparamos cada arreglo con flores frescas y lo llevamos hasta la puerta de quien más quieres.</p>
+      <ul class="pie__redes" aria-label="Redes sociales">
+        <% for (const red of negocio.redes) { %>
+        <li>
+          <a class="pie__red" href="<%= red.url %>" target="_blank" rel="noopener" aria-label="<%= red.nombre %> de Perú Flowers (se abre en otra pestaña)">
+            <%- include('icono', { nombre: red.icono }) %>
+          </a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+
+    <div class="pie__columna">
+      <h2 class="pie__titulo">Tienda</h2>
+      <ul class="pie__lista">
+        <li><a href="/catalogo">Catálogo</a></li>
+        <li><a href="/#como-comprar">Cómo comprar</a></li>
+        <li><a href="/#nosotros">Nosotros</a></li>
+        <li><a href="/carrito">Mi carrito</a></li>
+      </ul>
+    </div>
+
+    <div class="pie__columna">
+      <h2 class="pie__titulo">Ayuda</h2>
+      <ul class="pie__lista">
+        <% if (clienteActual) { %>
+        <li><a href="/carrito">Continuar mi pedido</a></li>
+        <% } else { %>
+        <li><a href="/ingresar">Iniciar sesión</a></li>
+        <li><a href="/registro">Crear cuenta</a></li>
+        <% } %>
+        <li><a href="/politica-de-privacidad">Política de privacidad</a></li>
+      </ul>
+    </div>
+
+    <div class="pie__columna">
+      <h2 class="pie__titulo">Contáctanos</h2>
+      <ul class="pie__lista pie__lista--iconos">
+        <li><%- include('icono', { nombre: 'ubicacion' }) %> <span><%= negocio.direccion %></span></li>
+        <li><%- include('icono', { nombre: 'camion' }) %> <span><%= negocio.coberturaEntrega %></span></li>
+        <li><%- include('icono', { nombre: 'whatsapp' }) %> <a href="<%= enlaceWhatsapp %>" target="_blank" rel="noopener">Escríbenos por WhatsApp</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="pie__legal">
+    <p class="contenedor">© <%= anioActual %> Perú Flowers · Prototipo académico de Peruflower.com · IDAT</p>
+  </div>
+</footer>
+
+<%- include('boton-whatsapp') %>

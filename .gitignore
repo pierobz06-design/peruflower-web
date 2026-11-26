@@ -1,0 +1,27 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno (contraseñas y datos sensibles)
+.env
+.env.*
+!.env.example
+
+# Material de consulta del curso (no se publica)
+referencias/
+Carpeta refeencias/
+
+# Registros y archivos temporales
+logs/
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# QR de pago personal (se genera con npm run imagenes:preparar)
+public/img/pagos/

@@ -1,0 +1,39 @@
+<%#
+  Inicio de cada página: <head>, estilos comunes y los propios de la página.
+  Parámetros: titulo, descripcion, estilos (nombres de archivos de css/components o css/pages)
+%>
+<%
+  const estilosComunes = [
+    'base/variables', 'base/reset', 'base/tipografia', 'base/utilidades', 'base/animaciones',
+    'components/botones', 'components/formularios', 'components/header', 'components/menu-movil',
+    'components/tarjeta-producto', 'components/carrusel', 'components/seccion-texto',
+    'components/whatsapp', 'components/footer', 'components/carrito-lateral', 'components/avisos', 'components/aviso-cookies'
+  ];
+  const estilosComponentes = ['hero', 'marquesina', 'insignia-giratoria', 'tarjeta-ocasion'];
+  const estilosPagina = (typeof estilos !== 'undefined' ? estilos : []).map((nombre) =>
+    estilosComponentes.includes(nombre) ? `components/${nombre}` : `pages/${nombre}`
+  );
+%>
+<!doctype html>
+<html lang="es-PE">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= typeof titulo !== 'undefined' ? titulo : 'Perú Flowers' %></title>
+    <meta name="description" content="<%= typeof descripcion !== 'undefined' ? descripcion : negocio.coberturaEntrega %>">
+    <meta name="theme-color" content="#d62828">
+    <% if (typeof csrfToken !== 'undefined') { %><meta name="csrf-token" content="<%= csrfToken %>"><% } %>
+    <link rel="icon" href="/img/iconos/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/img/iconos/apple-touch-icon.png">
+    <link rel="preload" href="/fuentes/quicksand/files/quicksand-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fuentes/aboreto/files/aboreto-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <% for (const hoja of [...estilosComunes, ...estilosPagina]) { %>
+    <link rel="stylesheet" href="/css/<%= hoja %>.css">
+    <% } %>
+    <script type="module" src="/js/app.js"></script>
+    <% for (const script of (typeof scripts !== 'undefined' ? scripts : [])) { %>
+    <script type="module" src="/js/pages/<%= script %>.js"></script>
+    <% } %>
+  </head>
+  <body>
+    <a class="saltar-contenido" href="#contenido">Saltar al contenido</a>

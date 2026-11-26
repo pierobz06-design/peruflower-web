@@ -1,0 +1,18 @@
+<%# Carrusel de productos. Parámetros: id, etiqueta (nombre accesible), productos, autoplay (ms, opcional) %>
+<div class="carrusel" data-carrusel <%- typeof autoplay !== 'undefined' ? `data-autoplay="${autoplay}"` : '' %> role="region" aria-roledescription="carrusel" aria-label="Carrusel: <%= etiqueta %>">
+  <div class="carrusel__ventana">
+    <ul class="carrusel__pista" id="<%= id %>" data-carrusel-pista>
+      <% for (const producto of productos) { %>
+      <li class="carrusel__item carrusel__item--producto"><%- include('tarjeta-producto', { producto }) %></li>
+      <% } %>
+    </ul>
+  </div>
+  <div class="carrusel__flechas">
+    <button class="carrusel__flecha" type="button" aria-controls="<%= id %>" aria-label="Ver anteriores" data-carrusel-anterior>
+      <%- include('icono', { nombre: 'flecha-izquierda' }) %>
+    </button>
+    <button class="carrusel__flecha" type="button" aria-controls="<%= id %>" aria-label="Ver siguientes" data-carrusel-siguiente>
+      <%- include('icono', { nombre: 'flecha-derecha' }) %>
+    </button>
+  </div>
+</div>

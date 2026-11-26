@@ -1,0 +1,37 @@
+[
+  {
+    "nombre": "Cumpleaños",
+    "slug": "cumpleanos",
+    "descripcion": "Ramos y arreglos para celebrar un año más de vida.",
+    "orden": 1,
+    "imagen": "/img/ocasiones/cumpleanos.webp"
+  },
+  {
+    "nombre": "Para Mamá",
+    "slug": "para-mama",
+    "descripcion": "Detalles especiales para la persona más importante.",
+    "orden": 2,
+    "imagen": "/img/ocasiones/para-mama.webp"
+  },
+  {
+    "nombre": "Arreglos",
+    "slug": "arreglos",
+    "descripcion": "Arreglos en florero, canasta o maceta listos para regalar.",
+    "orden": 3,
+    "imagen": "/img/ocasiones/arreglos.webp"
+  },
+  {
+    "nombre": "Box",
+    "slug": "box",
+    "descripcion": "Flores en cajas y sombrereras de diseño.",
+    "orden": 4,
+    "imagen": "/img/ocasiones/box.webp"
+  },
+  {
+    "nombre": "Condolencias",
+    "slug": "condolencias",
+    "descripcion": "Coronas, mantos y lágrimas para acompañar con respeto.",
+    "orden": 5,
+    "imagen": "/img/ocasiones/condolencias.webp"
+  }
+]

@@ -1,0 +1,103 @@
+<%- include('partials/cabeza') %>
+<%
+  const v = (campo) => (valores[campo] !== undefined && valores[campo] !== null ? valores[campo] : '');
+  const ocasionesElegidas = [].concat(valores.ocasiones || []).map(Number);
+  const accion = producto ? `/admin/productos/${producto.id}` : '/admin/productos';
+%>
+<div class="admin-distribucion">
+  <%- include('partials/barra') %>
+  <main id="contenido" class="admin-contenido">
+    <div class="admin-cabecera">
+      <div>
+        <a class="enlace" href="/admin/productos">← Volver a productos</a>
+        <h1 class="admin-titulo"><%= producto ? 'Editar producto' : 'Nuevo producto' %></h1>
+        <% if (producto) { %><p class="admin-subtitulo">URL en la tienda: <a class="enlace" href="/producto/<%= producto.slug %>" target="_blank" rel="noopener">/producto/<%= producto.slug %></a></p><% } %>
+      </div>
+    </div>
+
+    <% if (Object.keys(errores).length > 0) { %>
+    <p class="alerta alerta--error" role="alert">Revisa los campos marcados en rojo.</p>
+    <% } %>
+
+    <form class="admin-formulario-producto" action="<%= accion %>" method="post" enctype="multipart/form-data" novalidate data-validar>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <section class="admin-tarjeta formulario" aria-labelledby="titulo-datos">
+        <h2 id="titulo-datos">Datos del arreglo</h2>
+        <%- include('../partials/campo-texto', { id: 'nombre', nombre: 'nombre', etiqueta: 'Nombre', valor: v('nombre'), error: errores.nombre,
+              atributos: 'required minlength="3" maxlength="120"' }) %>
+        <div class="formulario__fila">
+          <%- include('../partials/campo-texto', { id: 'sku', nombre: 'sku', etiqueta: 'Código (SKU)', valor: v('sku'), error: errores.sku,
+                ayuda: 'Debe ser único. Ejemplo: PF-038.',
+                atributos: 'required minlength="2" maxlength="30"' }) %>
+          <div class="campo<%= errores.categoriaId ? ' campo--error' : '' %>">
+            <label class="campo__etiqueta" for="categoriaId">Categoría principal</label>
+            <select class="entrada" id="categoriaId" name="categoriaId" required aria-describedby="error-categoriaId" data-mensaje-requerido="Elige la categoría principal.">
+              <option value="">Elige una categoría</option>
+              <% for (const categoria of categorias) { %>
+              <option value="<%= categoria.id %>" <%= Number(v('categoriaId')) === categoria.id ? 'selected' : '' %>><%= categoria.nombre %></option>
+              <% } %>
+            </select>
+            <p class="campo__error" id="error-categoriaId" data-error-de="categoriaId"><%= errores.categoriaId || '' %></p>
+          </div>
+        </div>
+        <div class="formulario__fila">
+          <%- include('../partials/campo-texto', { id: 'precio', nombre: 'precio', etiqueta: 'Precio (S/)', tipo: 'number', valor: v('precio'), error: errores.precio,
+                atributos: 'required min="1" max="10000" step="0.01" inputmode="decimal"' }) %>
+          <%- include('../partials/campo-texto', { id: 'precioOferta', nombre: 'precioOferta', etiqueta: 'Precio de oferta (S/)', tipo: 'number', valor: v('precioOferta'), error: errores.precioOferta, opcional: true,
+                ayuda: 'Déjalo vacío si no hay oferta.',
+                atributos: 'min="1" max="10000" step="0.01" inputmode="decimal"' }) %>
+        </div>
+        <div class="campo<%= errores.descripcion ? ' campo--error' : '' %>">
+          <label class="campo__etiqueta" for="descripcion">Descripción</label>
+          <textarea class="entrada entrada--area" id="descripcion" name="descripcion" rows="7" required minlength="10" maxlength="2000" aria-describedby="ayuda-descripcion error-descripcion"><%= v('descripcion') %></textarea>
+          <p class="campo__ayuda" id="ayuda-descripcion">Escribe una característica por línea (flores, florero o canasta, medidas, complementos).</p>
+          <p class="campo__error" id="error-descripcion" data-error-de="descripcion"><%= errores.descripcion || '' %></p>
+        </div>
+      </section>
+
+      <aside class="admin-formulario-producto__lateral">
+        <section class="admin-tarjeta" aria-labelledby="titulo-foto">
+          <h2 id="titulo-foto">Foto</h2>
+          <div class="vista-foto" data-vista-foto>
+            <img src="<%= producto ? producto.imagen.replace('/img/productos/', '/img/productos/miniaturas/') : '/img/iconos/flor-peru-flowers.webp' %>" alt="Vista previa de la foto" width="600" height="600" data-vista-foto-imagen>
+          </div>
+          <div class="campo<%= errores.imagen ? ' campo--error' : '' %>">
+            <label class="campo__etiqueta" for="imagen"><%= producto ? 'Cambiar foto' : 'Subir foto' %><%= producto ? ' (opcional)' : '' %></label>
+            <input class="entrada entrada--archivo" id="imagen" name="imagen" type="file" accept="image/jpeg,image/png,image/webp" <%= producto ? '' : 'required' %>
+                   aria-describedby="ayuda-imagen error-imagen" data-mensaje-requerido="Sube una foto del arreglo." data-tamano-maximo="<%= tamanoMaximoMb %>">
+            <p class="campo__ayuda" id="ayuda-imagen">JPG, PNG o WebP de hasta <%= tamanoMaximoMb %> MB. Se guarda optimizada en public/img/productos/.</p>
+            <p class="campo__error" id="error-imagen" data-error-de="imagen"><%= errores.imagen || '' %></p>
+          </div>
+        </section>
+
+        <section class="admin-tarjeta" aria-labelledby="titulo-ocasiones">
+          <h2 id="titulo-ocasiones">Ocasiones</h2>
+          <p class="campo__ayuda">La categoría principal se incluye siempre.</p>
+          <% for (const categoria of categorias) { %>
+          <label class="casilla casilla--suave">
+            <input class="casilla__entrada" type="checkbox" name="ocasiones" value="<%= categoria.id %>" <%= ocasionesElegidas.includes(categoria.id) ? 'checked' : '' %>>
+            <span class="casilla__etiqueta"><%= categoria.nombre %></span>
+          </label>
+          <% } %>
+        </section>
+
+        <section class="admin-tarjeta" aria-labelledby="titulo-publicacion">
+          <h2 id="titulo-publicacion">Publicación</h2>
+          <label class="interruptor">
+            <input type="checkbox" name="disponible" value="si" <%= valores.disponible === true || valores.disponible === 'si' ? 'checked' : '' %>>
+            <span class="interruptor__pista" aria-hidden="true"></span>
+            <span>Disponible para pedidos</span>
+          </label>
+          <label class="interruptor">
+            <input type="checkbox" name="visible" value="si" <%= valores.visible === true || valores.visible === 'si' ? 'checked' : '' %>>
+            <span class="interruptor__pista" aria-hidden="true"></span>
+            <span>Visible en la tienda</span>
+          </label>
+          <button class="boton boton--primario boton--bloque" type="submit"><%= producto ? 'Guardar cambios' : 'Agregar producto' %></button>
+        </section>
+      </aside>
+    </form>
+  </main>
+</div>
+<%- include('partials/cierre') %>

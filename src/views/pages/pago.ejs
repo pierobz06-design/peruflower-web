@@ -1,0 +1,142 @@
+<%- include('../partials/cabeza') %>
+<%- include('../partials/header') %>
+<% const v = (campo) => valores[campo] || ''; %>
+
+<main id="contenido" class="pagina-compra">
+  <div class="contenedor">
+    <%- include('../partials/pasos-compra', { actual: 3 }) %>
+    <h1 class="pagina-compra__titulo">Pagar pedido <%= pedido.codigo %></h1>
+    <p class="pagina-compra__estado">Total a pagar: <strong class="monto-destacado"><%= pedido.totalTexto %></strong></p>
+
+    <% if (error) { %>
+    <p class="alerta alerta--error alerta--animada" role="alert"><%= error %></p>
+    <% } %>
+
+    <div class="pagina-compra__distribucion">
+      <section class="tarjeta-compra metodos" aria-labelledby="titulo-metodos">
+        <h2 class="tarjeta-compra__subtitulo" id="titulo-metodos">Elige cómo pagar</h2>
+
+        <div class="metodos__opciones" role="radiogroup" aria-labelledby="titulo-metodos">
+          <label class="metodo">
+            <input class="metodo__entrada" type="radio" name="metodo" value="tarjeta" id="metodo-tarjeta" <%= metodoActivo === 'tarjeta' ? 'checked' : '' %>>
+            <span class="metodo__icono"><%- include('../partials/icono', { nombre: 'candado' }) %></span>
+            <span class="metodo__texto"><strong>Tarjeta</strong><span>Débito o crédito</span></span>
+          </label>
+          <label class="metodo">
+            <input class="metodo__entrada" type="radio" name="metodo" value="billetera" id="metodo-billetera" <%= metodoActivo === 'billetera' ? 'checked' : '' %>>
+            <span class="metodo__icono metodo__icono--billetera">S/</span>
+            <span class="metodo__texto"><strong>Yape o Plin</strong><span>Con número de operación</span></span>
+          </label>
+          <label class="metodo">
+            <input class="metodo__entrada" type="radio" name="metodo" value="whatsapp" id="metodo-whatsapp" <%= metodoActivo === 'whatsapp' ? 'checked' : '' %>>
+            <span class="metodo__icono metodo__icono--whatsapp"><%- include('../partials/icono', { nombre: 'whatsapp' }) %></span>
+            <span class="metodo__texto"><strong>WhatsApp</strong><span>Coordina con nosotros</span></span>
+          </label>
+        </div>
+        <p class="metodos__ayuda">Selecciona una opción para continuar.</p>
+
+        <%# 1. Tarjeta: pasarela simulada en modo de pruebas %>
+        <div class="metodo-panel metodo-panel--tarjeta">
+          <p class="aviso-pruebas" role="note">
+            <%- include('../partials/icono', { nombre: 'candado' }) %>
+            <span><strong>Pasarela en modo de pruebas.</strong> No se realiza ningún cobro real. No guardamos tu tarjeta: solo sus últimos 4 dígitos.</span>
+          </p>
+          <form class="formulario" action="/pedido/<%= pedido.codigo %>/pago/tarjeta" method="post" novalidate data-validar data-form-tarjeta autocomplete="on">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="campo-tarjeta">
+              <%- include('../partials/campo-texto', { id: 'numeroTarjeta', nombre: 'numeroTarjeta', etiqueta: 'Número de tarjeta', tipo: 'text', valor: '', error: errores.numeroTarjeta,
+                    atributos: 'required inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="0000 0000 0000 0000" data-tarjeta-numero' }) %>
+              <span class="campo-tarjeta__marca" data-tarjeta-marca aria-live="polite"></span>
+            </div>
+            <%- include('../partials/campo-texto', { id: 'titularTarjeta', nombre: 'titularTarjeta', etiqueta: 'Nombre como aparece en la tarjeta', valor: v('titularTarjeta'), error: errores.titularTarjeta,
+                  atributos: `required minlength="3" maxlength="60" autocomplete="cc-name" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ' .\\-]+" data-mensaje-patron="Usa solo letras y espacios."` }) %>
+            <div class="formulario__fila">
+              <%- include('../partials/campo-texto', { id: 'vencimiento', nombre: 'vencimiento', etiqueta: 'Vencimiento (MM/AA)', valor: v('vencimiento'), error: errores.vencimiento,
+                    atributos: 'required inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/AA" data-tarjeta-vencimiento' }) %>
+              <%- include('../partials/campo-texto', { id: 'cvv', nombre: 'cvv', etiqueta: 'CVV', tipo: 'password', valor: '', error: errores.cvv,
+                    ayuda: '3 dígitos al reverso (4 en American Express).',
+                    atributos: 'required inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="•••" data-solo-digitos data-tarjeta-cvv' }) %>
+            </div>
+            <button class="boton boton--primario boton--bloque boton--procesar" type="submit" data-texto-procesando="Procesando pago…">
+              <span class="boton__giro" aria-hidden="true"></span>
+              <span class="boton__texto">Pagar <%= pedido.totalTexto %></span>
+            </button>
+          </form>
+          <details class="tarjetas-prueba">
+            <summary>Ver tarjetas de prueba</summary>
+            <table>
+              <caption class="oculto-visual">Tarjetas de prueba de la pasarela simulada</caption>
+              <thead><tr><th scope="col">Número</th><th scope="col">Marca</th><th scope="col">Resultado</th></tr></thead>
+              <tbody>
+                <% for (const tarjeta of tarjetasDePrueba) { %>
+                <tr><td><code><%= tarjeta.numero %></code></td><td><%= tarjeta.marca %></td><td class="<%= tarjeta.resultado === 'Aprobada' ? 'texto-exito' : 'texto-error' %>"><%= tarjeta.resultado %></td></tr>
+                <% } %>
+              </tbody>
+            </table>
+            <p>Usa cualquier nombre, una fecha futura (por ejemplo 12/30) y CVV 123.</p>
+          </details>
+        </div>
+
+        <%# 2. Yape o Plin %>
+        <div class="metodo-panel metodo-panel--billetera">
+          <ol class="pasos-billetera">
+            <li>
+              <span class="pasos-billetera__numero">1</span>
+              <div>
+                <p>Paga <strong><%= pedido.totalTexto %></strong> por Yape o Plin al número:</p>
+                <p class="numero-billetera">
+                  <strong data-numero-billetera><%= yapePlin.numero %></strong>
+                  <button class="boton-copiar" type="button" data-copiar="<%= yapePlin.numero %>">Copiar</button>
+                </p>
+                <p class="pasos-billetera__titular">A nombre de: <%= yapePlin.titular %></p>
+                <% if (yapePlin.qr) { %>
+                <figure class="qr-billetera">
+                  <img src="<%= yapePlin.qr %>" alt="Código QR de Yape de Perú Flowers" width="220" height="259" loading="lazy">
+                  <figcaption>Escanea el código desde tu app</figcaption>
+                </figure>
+                <% } %>
+              </div>
+            </li>
+            <li>
+              <span class="pasos-billetera__numero">2</span>
+              <div>
+                <p>Escribe el número de operación que aparece en tu constancia.</p>
+                <form class="formulario" action="/pedido/<%= pedido.codigo %>/pago/billetera" method="post" novalidate data-validar>
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <fieldset class="chips chips--billetera">
+                    <legend class="oculto-visual">Aplicación usada</legend>
+                    <label class="chip-radio"><input type="radio" name="billetera" value="yape" required <%= v('billetera') !== 'plin' ? 'checked' : '' %>> <span>Yape</span></label>
+                    <label class="chip-radio"><input type="radio" name="billetera" value="plin" <%= v('billetera') === 'plin' ? 'checked' : '' %>> <span>Plin</span></label>
+                  </fieldset>
+                  <%- include('../partials/campo-texto', { id: 'codigoOperacion', nombre: 'codigoOperacion', etiqueta: 'Número de operación', valor: v('codigoOperacion'), error: errores.codigoOperacion,
+                        atributos: 'required inputmode="numeric" minlength="6" maxlength="12" pattern="[0-9]{6,12}" data-solo-digitos data-mensaje-patron="Escribe entre 6 y 12 dígitos."' }) %>
+                  <button class="boton boton--primario boton--bloque" type="submit">Enviar número de operación</button>
+                </form>
+              </div>
+            </li>
+          </ol>
+          <p class="alerta alerta--aviso">Tu pedido quedará <strong>Pendiente</strong> hasta que nuestro personal confirme el pago.</p>
+        </div>
+
+        <%# 3. Continuar por WhatsApp %>
+        <div class="metodo-panel metodo-panel--whatsapp">
+          <p>Te enviamos a WhatsApp con el detalle completo de tu pedido para que nuestra recepcionista te ayude con el pago o cualquier duda.</p>
+          <form action="/pedido/<%= pedido.codigo %>/pago/whatsapp" method="post" data-form-whatsapp>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button class="boton boton--whatsapp boton--bloque" type="submit">
+              <%- include('../partials/icono', { nombre: 'whatsapp' }) %> Continuar por WhatsApp
+            </button>
+          </form>
+          <p class="metodos__ayuda">Tu pedido quedará <strong>Pendiente</strong> hasta coordinar el pago.</p>
+        </div>
+      </section>
+
+      <aside class="tarjeta-compra resumen-compra" aria-labelledby="titulo-resumen-pedido">
+        <h2 class="resumen-compra__titulo" id="titulo-resumen-pedido">Resumen del pedido</h2>
+        <%- include('../partials/resumen-pedido', { pedido }) %>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/cierre') %>

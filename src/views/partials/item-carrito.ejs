@@ -1,0 +1,25 @@
+<%#
+  Producto dentro del carrito. Se usa para pintar desde el servidor (página /carrito)
+  y como plantilla que js/components/carrito.js completa con los datos de la API.
+  Parámetro: item (null para la plantilla)
+%>
+<% const dato = (campo, porDefecto = '') => (item ? item[campo] : porDefecto); %>
+<li class="item-carrito<%= item && !item.disponible ? ' item-carrito--agotado' : '' %>" data-item-carrito data-producto-id="<%= dato('productoId') %>">
+  <a class="item-carrito__imagen" href="/producto/<%= dato('slug') %>" data-campo-enlace tabindex="-1">
+    <img src="<%= dato('miniatura', '/img/iconos/flor-peru-flowers.webp') %>" alt="" width="600" height="600" loading="lazy" decoding="async" data-campo-imagen>
+  </a>
+  <div class="item-carrito__datos">
+    <a class="item-carrito__nombre" href="/producto/<%= dato('slug') %>" data-campo-enlace data-campo="nombre"><%= dato('nombre') %></a>
+    <p class="item-carrito__precio"><span data-campo="precioTexto"><%= dato('precioTexto') %></span> c/u</p>
+    <p class="item-carrito__agotado" data-campo-agotado <%- item && !item.disponible ? '' : 'hidden' %>>Ya no está disponible. Quítalo para continuar.</p>
+    <div class="cantidad" data-cantidad>
+      <button class="cantidad__boton" type="button" aria-label="Quitar uno" data-accion="restar">−</button>
+      <input class="cantidad__valor" type="number" inputmode="numeric" min="1" max="<%= typeof cantidadMaxima !== 'undefined' ? cantidadMaxima : 20 %>" value="<%= dato('cantidad', 1) %>" aria-label="Cantidad" data-accion="cambiar" data-campo-cantidad>
+      <button class="cantidad__boton" type="button" aria-label="Agregar uno" data-accion="sumar">+</button>
+    </div>
+  </div>
+  <p class="item-carrito__subtotal" data-campo="subtotalTexto"><%= dato('subtotalTexto') %></p>
+  <button class="item-carrito__quitar" type="button" aria-label="Quitar del carrito" data-accion="quitar">
+    <%- include('icono', { nombre: 'cerrar' }) %>
+  </button>
+</li>

@@ -1,0 +1,15 @@
+/* Frase centrada con separador y botón, entre secciones (como en la referencia) */
+.seccion-texto {
+  display: grid;
+  justify-items: center;
+  max-width: 920px;
+  margin-bottom: clamp(32px, 5vw, 56px);
+  text-align: center;
+}
+
+.seccion-texto__frase {
+  color: var(--color-tinta);
+  font-size: var(--texto-xl);
+  font-weight: 600;
+  line-height: 1.45;
+}

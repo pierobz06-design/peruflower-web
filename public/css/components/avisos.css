@@ -1,0 +1,112 @@
+/* Avisos emergentes (cuenta creada, producto agregado, errores).
+   Celular: arriba, bajo el header. Computadora: abajo a la izquierda, para no tapar
+   el carrito lateral ni el botón de WhatsApp. */
+.avisos {
+  --entrada-aviso: translateY(-30px);
+  position: fixed;
+  top: 84px;
+  right: 16px;
+  left: 16px;
+  z-index: calc(var(--capa-panel) + 10);
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: min(380px, 100%);
+  padding: 14px 14px 14px 16px;
+  border-left: 5px solid var(--color-exito);
+  border-radius: var(--radio-sm);
+  background: var(--color-blanco);
+  box-shadow: var(--sombra-fuerte);
+  pointer-events: auto;
+  animation: entrar-aviso 0.5s var(--curva) both;
+}
+
+.aviso.esta-saliendo {
+  animation: salir-aviso 0.4s var(--curva) both;
+}
+
+.aviso--error {
+  border-color: var(--color-error);
+}
+
+.aviso--info {
+  border-color: var(--color-primario);
+}
+
+.aviso__icono {
+  margin-top: 2px;
+  color: var(--color-exito);
+}
+
+.aviso--error .aviso__icono {
+  color: var(--color-error);
+}
+
+.aviso--info .aviso__icono {
+  color: var(--color-primario);
+}
+
+.aviso__texto {
+  flex: 1;
+  color: var(--color-tinta);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.aviso__cerrar {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--color-texto-suave);
+  transition:
+    transform var(--duracion),
+    background var(--duracion);
+}
+
+.aviso__cerrar:hover {
+  background: var(--color-rosa-50);
+  transform: rotate(90deg);
+}
+
+.aviso__cerrar .icono {
+  width: 16px;
+  height: 16px;
+}
+
+@keyframes entrar-aviso {
+  from {
+    opacity: 0;
+    transform: var(--entrada-aviso);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes salir-aviso {
+  to {
+    opacity: 0;
+    transform: var(--entrada-aviso);
+  }
+}
+
+@media (min-width: 1024px) {
+  .avisos {
+    --entrada-aviso: translateX(-110%);
+    top: auto;
+    right: auto;
+    bottom: 24px;
+    left: 24px;
+    justify-items: start;
+  }
+}

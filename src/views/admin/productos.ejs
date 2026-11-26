@@ -1,0 +1,70 @@
+<%- include('partials/cabeza') %>
+<% const filtros = [{ valor: '', texto: 'Todos' }, { valor: 'visibles', texto: 'Visibles' }, { valor: 'ocultos', texto: 'Ocultos' }]; %>
+<div class="admin-distribucion">
+  <%- include('partials/barra') %>
+  <main id="contenido" class="admin-contenido">
+    <div class="admin-cabecera">
+      <div>
+        <h1 class="admin-titulo">Productos</h1>
+        <p class="admin-subtitulo">Agrega, edita u oculta los arreglos del catálogo. Los ocultos no aparecen en la tienda.</p>
+      </div>
+      <a class="boton boton--primario" href="/admin/productos/nuevo">+ Nuevo producto</a>
+    </div>
+
+    <form class="admin-filtros" action="/admin/productos" method="get" role="search">
+      <div class="chips" role="group" aria-label="Mostrar">
+        <% for (const filtro of filtros) { %>
+        <a class="chip<%= visibilidad === filtro.valor ? ' es-activo' : '' %>" href="/admin/productos<%= filtro.valor ? '?ver=' + filtro.valor : '' %>" <%- visibilidad === filtro.valor ? 'aria-current="true"' : '' %>><%= filtro.texto %></a>
+        <% } %>
+      </div>
+      <% if (visibilidad) { %><input type="hidden" name="ver" value="<%= visibilidad %>"><% } %>
+      <label class="oculto-visual" for="buscar-producto">Buscar por nombre o código</label>
+      <input class="entrada admin-filtros__buscar" id="buscar-producto" type="search" name="buscar" value="<%= buscar %>" placeholder="Buscar por nombre o código" maxlength="60">
+      <button class="boton boton--contorno" type="submit">Buscar</button>
+    </form>
+
+    <section class="admin-tarjeta" aria-label="Lista de productos">
+      <p class="admin-total"><%= productos.length %> productos</p>
+      <% if (productos.length === 0) { %>
+      <p class="admin-vacio">No hay productos con ese filtro.</p>
+      <% } else { %>
+      <div class="tabla-desplazable">
+        <table class="tabla tabla--productos">
+          <thead>
+            <tr><th scope="col">Foto</th><th scope="col">Producto</th><th scope="col">Precio</th><th scope="col">Ocasiones</th><th scope="col">Estado</th><th scope="col"><span class="oculto-visual">Acciones</span></th></tr>
+          </thead>
+          <tbody>
+            <% for (const p of productos) { %>
+            <tr class="<%= p.visible ? '' : 'fila-oculta' %>">
+              <td><img class="tabla__foto" src="<%= p.miniatura %>" alt="" width="600" height="600" loading="lazy" decoding="async"></td>
+              <td>
+                <strong><%= p.nombre %></strong>
+                <span class="tabla__secundario">SKU <%= p.sku %></span>
+              </td>
+              <td>
+                <%= p.precioTexto %>
+                <% if (p.precioOfertaTexto) { %><span class="tabla__secundario">Oferta <%= p.precioOfertaTexto %></span><% } %>
+              </td>
+              <td><span class="tabla__secundario"><%= p.ocasiones %></span></td>
+              <td>
+                <span class="insignia <%= p.visible ? 'insignia--visible' : 'insignia--oculto' %>"><%= p.visible ? 'Visible' : 'Oculto' %></span>
+                <% if (!p.disponible) { %><span class="insignia insignia--agotado">Agotado</span><% } %>
+              </td>
+              <td class="tabla__acciones">
+                <a class="boton boton--contorno boton--chico" href="/admin/productos/<%= p.id %>/editar">Editar</a>
+                <form action="/admin/productos/<%= p.id %>/visibilidad" method="post">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <input type="hidden" name="volver" value="<%= rutaVolver %>">
+                  <button class="boton boton--texto boton--chico" type="submit" <%- p.visible ? 'data-confirmar="¿Ocultar este producto de la tienda?"' : '' %>><%= p.visible ? 'Ocultar' : 'Mostrar' %></button>
+                </form>
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </section>
+  </main>
+</div>
+<%- include('partials/cierre') %>

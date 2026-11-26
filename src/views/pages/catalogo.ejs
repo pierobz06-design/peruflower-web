@@ -1,0 +1,145 @@
+<%- include('../partials/cabeza') %>
+<%- include('../partials/header') %>
+<%
+  const hayFiltros = Boolean(filtros.ocasion || filtros.precioMin !== undefined || filtros.precioMax !== undefined);
+  const enlaceSinOcasion = crearEnlaceCatalogo({ min: filtros.precioMin, max: filtros.precioMax });
+  const enlaceSinPresupuesto = crearEnlaceCatalogo({ ocasion: filtros.ocasion });
+%>
+
+<main id="contenido">
+  <section class="cabecera-catalogo">
+    <div class="contenedor cabecera-catalogo__contenido">
+      <nav class="migas" aria-label="Ruta de navegación">
+        <ol>
+          <li><a href="/">Inicio</a></li>
+          <% if (categoria) { %>
+          <li><a href="/catalogo">Catálogo</a></li>
+          <li aria-current="page"><%= categoria.nombre %></li>
+          <% } else { %>
+          <li aria-current="page">Catálogo</li>
+          <% } %>
+        </ol>
+      </nav>
+      <h1 class="cabecera-catalogo__titulo"><%= categoria ? categoria.nombre : 'Nuestro catálogo' %></h1>
+      <p class="cabecera-catalogo__texto"><%= categoria ? categoria.descripcion : 'Filtra por ocasión y presupuesto para encontrar el arreglo ideal.' %></p>
+    </div>
+  </section>
+
+  <div class="contenedor catalogo">
+    <button class="boton boton--contorno catalogo__abrir-filtros" type="button" aria-controls="panel-filtros" aria-expanded="false" data-abrir-filtros>
+      <%- include('../partials/icono', { nombre: 'filtro' }) %> Presupuesto
+    </button>
+
+    <aside class="filtros" id="panel-filtros" aria-label="Filtro por presupuesto" data-panel-filtros>
+      <form class="filtros__formulario" action="/catalogo" method="get" data-formulario-filtros>
+        <div class="filtros__cabecera">
+          <h2 class="filtros__titulo">Presupuesto</h2>
+          <button class="boton-cerrar filtros__cerrar" type="button" aria-label="Cerrar filtros" data-cerrar-filtros>
+            <%- include('../partials/icono', { nombre: 'cerrar' }) %>
+          </button>
+        </div>
+
+        <% if (filtros.ocasion) { %><input type="hidden" name="ocasion" value="<%= filtros.ocasion %>"><% } %>
+        <fieldset class="filtros__grupo">
+          <legend class="oculto-visual">Rango de presupuesto</legend>
+          <ul class="chips">
+            <% for (const rango of rangosPresupuesto) {
+                 const activo = rango.min === filtros.precioMin && rango.max === filtros.precioMax; %>
+            <li>
+              <a class="chip<%= activo ? ' es-activo' : '' %>" href="<%= crearEnlaceCatalogo({ ocasion: filtros.ocasion, min: rango.min, max: rango.max }) %>" <%- activo ? 'aria-current="true"' : '' %>><%= rango.etiqueta %></a>
+            </li>
+            <% } %>
+          </ul>
+
+          <div class="rango-doble" data-rango-doble data-minimo="<%= rango.minimo %>" data-maximo="<%= rango.maximo %>">
+            <div class="rango-doble__valores">
+              <label for="filtro-min">Desde <span class="oculto-visual">(soles)</span></label>
+              <label for="filtro-max">Hasta <span class="oculto-visual">(soles)</span></label>
+            </div>
+            <div class="rango-doble__campos">
+              <div class="campo-precio">
+                <span aria-hidden="true">S/</span>
+                <input class="campo-precio__entrada" id="filtro-min" name="min" type="number" inputmode="numeric" min="0" max="10000" step="1" placeholder="<%= rango.minimo %>" value="<%= filtros.precioMin !== undefined ? filtros.precioMin : '' %>" data-rango-entrada="min">
+              </div>
+              <span class="rango-doble__guion" aria-hidden="true">—</span>
+              <div class="campo-precio">
+                <span aria-hidden="true">S/</span>
+                <input class="campo-precio__entrada" id="filtro-max" name="max" type="number" inputmode="numeric" min="0" max="10000" step="1" placeholder="<%= rango.maximo %>" value="<%= filtros.precioMax !== undefined ? filtros.precioMax : '' %>" data-rango-entrada="max">
+              </div>
+            </div>
+            <div class="rango-doble__deslizadores" data-rango-pista hidden>
+              <input class="rango-doble__deslizador" type="range" min="<%= rango.minimo %>" max="<%= rango.maximo %>" step="5" value="<%= filtros.precioMin !== undefined ? filtros.precioMin : rango.minimo %>" aria-label="Precio mínimo" data-rango-deslizador="min">
+              <input class="rango-doble__deslizador" type="range" min="<%= rango.minimo %>" max="<%= rango.maximo %>" step="5" value="<%= filtros.precioMax !== undefined ? filtros.precioMax : rango.maximo %>" aria-label="Precio máximo" data-rango-deslizador="max">
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="filtros__acciones">
+          <button class="boton boton--primario boton--bloque" type="submit">Aplicar filtros</button>
+          <% if (hayFiltros) { %>
+          <a class="boton boton--texto boton--bloque" href="/catalogo">Limpiar filtros</a>
+          <% } %>
+        </div>
+      </form>
+    </aside>
+    <div class="filtros__fondo" data-cerrar-filtros hidden></div>
+
+    <section class="resultados" aria-labelledby="titulo-resultados">
+      <nav class="ocasiones-filtro" aria-label="Filtrar por ocasión">
+        <ul class="ocasiones-filtro__lista">
+          <li>
+            <a class="ocasion-filtro<%= filtros.ocasion ? '' : ' es-activa' %>" href="<%= crearEnlaceCatalogo({ min: filtros.precioMin, max: filtros.precioMax }) %>" <%- filtros.ocasion ? '' : 'aria-current="true"' %>>
+              <span class="ocasion-filtro__imagen ocasion-filtro__imagen--todas"><img src="/img/iconos/flor-peru-flowers.webp" alt="" width="256" height="256" decoding="async"></span>
+              <span class="ocasion-filtro__nombre">Todas</span>
+            </a>
+          </li>
+          <% for (const ocasion of categoriasMenu) { const activa = filtros.ocasion === ocasion.slug; %>
+          <li>
+            <a class="ocasion-filtro<%= activa ? ' es-activa' : '' %>" href="<%= crearEnlaceCatalogo({ ocasion: ocasion.slug, min: filtros.precioMin, max: filtros.precioMax }) %>" <%- activa ? 'aria-current="true"' : '' %>>
+              <span class="ocasion-filtro__imagen"><img src="<%= ocasion.imagen %>" alt="" width="600" height="800" decoding="async"></span>
+              <span class="ocasion-filtro__nombre"><%= ocasion.nombre %></span>
+              <span class="ocasion-filtro__total"><%= ocasion.totalProductos %> arreglos</span>
+            </a>
+          </li>
+          <% } %>
+        </ul>
+      </nav>
+
+      <div class="resultados__cabecera">
+        <h2 class="resultados__total" id="titulo-resultados" aria-live="polite">
+          <%= productos.length %> <%= productos.length === 1 ? 'arreglo encontrado' : 'arreglos encontrados' %>
+        </h2>
+        <% if (hayFiltros) { %>
+        <ul class="filtros-activos" aria-label="Filtros activos">
+          <% if (categoria) { %>
+          <li><a class="chip chip--quitar" href="<%= enlaceSinOcasion %>" aria-label="Quitar filtro <%= categoria.nombre %>"><%= categoria.nombre %> <%- include('../partials/icono', { nombre: 'cerrar' }) %></a></li>
+          <% } %>
+          <% if (presupuestoTexto) { %>
+          <li><a class="chip chip--quitar" href="<%= enlaceSinPresupuesto %>" aria-label="Quitar filtro de presupuesto <%= presupuestoTexto %>"><%= presupuestoTexto %> <%- include('../partials/icono', { nombre: 'cerrar' }) %></a></li>
+          <% } %>
+        </ul>
+        <% } %>
+      </div>
+
+      <% if (productos.length > 0) { %>
+      <ul class="grilla-productos">
+        <% for (const producto of productos) { %>
+        <li><%- include('../partials/tarjeta-producto', { producto }) %></li>
+        <% } %>
+      </ul>
+      <% } else { %>
+      <div class="sin-resultados">
+        <%- include('../partials/icono', { nombre: 'flor' }) %>
+        <h3>No encontramos arreglos con esos filtros</h3>
+        <p>Prueba con otro presupuesto u ocasión, o escríbenos y te ayudamos a encontrar una opción.</p>
+        <div class="sin-resultados__acciones">
+          <a class="boton boton--primario" href="/catalogo">Ver todo el catálogo</a>
+          <a class="boton boton--whatsapp" href="<%= enlaceWhatsapp %>" target="_blank" rel="noopener"><%- include('../partials/icono', { nombre: 'whatsapp' }) %> Pedir asesoría</a>
+        </div>
+      </div>
+      <% } %>
+    </section>
+  </div>
+</main>
+
+<%- include('../partials/cierre') %>

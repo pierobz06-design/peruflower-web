@@ -1,0 +1,37 @@
+<%# Carrito lateral (HU07): se abre desde el ícono del header o al agregar un producto. %>
+<div class="carrito-lateral" data-carrito-lateral hidden>
+  <div class="carrito-lateral__fondo" data-cerrar-carrito></div>
+  <aside class="carrito-lateral__panel" role="dialog" aria-modal="true" aria-labelledby="carrito-lateral-titulo">
+    <div class="carrito-lateral__cabecera">
+      <h2 class="carrito-lateral__titulo" id="carrito-lateral-titulo">
+        Tu carrito <span class="carrito-lateral__total" data-carrito-cantidad><%= carritoCantidad %></span>
+      </h2>
+      <button class="boton-cerrar" type="button" aria-label="Cerrar carrito" data-cerrar-carrito>
+        <%- include('icono', { nombre: 'cerrar' }) %>
+      </button>
+    </div>
+
+    <div class="carrito-lateral__cuerpo">
+      <div class="carrito-vacio" data-carrito-vacio <%- carritoCantidad > 0 ? 'hidden' : '' %>>
+        <%- include('icono', { nombre: 'carrito' }) %>
+        <p>Tu carrito está vacío.</p>
+        <a class="boton boton--contorno" href="/catalogo">Ver catálogo</a>
+      </div>
+      <ul class="lista-carrito" data-carrito-lista></ul>
+    </div>
+
+    <div class="carrito-lateral__pie" data-carrito-con-items <%- carritoCantidad > 0 ? '' : 'hidden' %>>
+      <p class="carrito-lateral__subtotal">
+        <span>Subtotal</span>
+        <strong data-carrito-subtotal></strong>
+      </p>
+      <p class="carrito-lateral__nota">El costo de envío se calcula según el distrito en el siguiente paso.</p>
+      <a class="boton boton--primario boton--bloque" href="/pedido/entrega" data-ir-a-pagar>Ir a pagar</a>
+      <a class="boton boton--texto boton--bloque" href="/carrito">Ver carrito completo</a>
+    </div>
+  </aside>
+</div>
+
+<template id="plantilla-item-carrito">
+  <%- include('item-carrito', { item: null }) %>
+</template>

@@ -1,0 +1,10 @@
+<%# Indicador de pasos de la compra. Parámetro: actual (1 carrito, 2 entrega, 3 pago) %>
+<% const pasos = ['Carrito', 'Entrega', 'Pago']; %>
+<ol class="pasos-compra" aria-label="Pasos de tu compra">
+  <% pasos.forEach((paso, indice) => { const numero = indice + 1; %>
+  <li class="pasos-compra__paso<%= numero < actual ? ' es-completo' : '' %><%= numero === actual ? ' es-actual' : '' %>" <%- numero === actual ? 'aria-current="step"' : '' %>>
+    <span class="pasos-compra__numero"><%= numero < actual ? '✓' : numero %></span>
+    <span class="pasos-compra__nombre"><%= paso %></span>
+  </li>
+  <% }) %>
+</ol>

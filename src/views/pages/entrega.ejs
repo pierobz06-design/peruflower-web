@@ -1,0 +1,110 @@
+<%- include('../partials/cabeza') %>
+<%- include('../partials/header') %>
+<%
+  const v = (campo) => (valores[campo] !== undefined && valores[campo] !== null ? valores[campo] : '');
+  const zonaElegida = Number(valores.zonaEntregaId) || 0;
+  const zonaActual = zonas.find((zona) => zona.id === zonaElegida);
+  const provincias = ['Lima', 'Callao'];
+%>
+
+<main id="contenido" class="pagina-compra">
+  <div class="contenedor">
+    <%- include('../partials/pasos-compra', { actual: 2 }) %>
+    <h1 class="pagina-compra__titulo">¿A dónde llevamos tus flores?</h1>
+
+    <% if (errores.general) { %>
+    <p class="alerta alerta--error" role="alert"><%= errores.general %></p>
+    <% } %>
+
+    <form class="pagina-compra__distribucion" action="/pedido/entrega" method="post" novalidate data-validar data-formulario-entrega>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <section class="tarjeta-compra formulario" aria-labelledby="titulo-receptor">
+        <h2 class="tarjeta-compra__subtitulo" id="titulo-receptor"><span class="tarjeta-compra__numero">1</span> ¿Quién recibe?</h2>
+        <div class="casilla casilla--suave">
+          <input class="casilla__entrada" type="checkbox" id="loRecibo" data-lo-recibo
+                 data-nombre="<%= cliente.nombres %> <%= cliente.apellidos %>" data-telefono="<%= cliente.telefono %>">
+          <label class="casilla__etiqueta" for="loRecibo">Lo recibo yo (usar mis datos)</label>
+        </div>
+        <div class="formulario__fila">
+          <%- include('../partials/campo-texto', { id: 'receptorNombre', nombre: 'receptorNombre', etiqueta: 'Nombre de quien recibe', valor: v('receptorNombre'), error: errores.receptorNombre,
+                atributos: `required minlength="3" maxlength="120" autocomplete="off" pattern="[A-Za-zÁÉÍÓÚÜÑáéíóúüñ' .\\-]+" data-mensaje-patron="Usa solo letras y espacios."` }) %>
+          <%- include('../partials/campo-texto', { id: 'receptorTelefono', nombre: 'receptorTelefono', etiqueta: 'Celular de quien recibe', tipo: 'tel', valor: v('receptorTelefono'), error: errores.receptorTelefono,
+                ayuda: 'Lo llamaremos solo si es necesario para la entrega.',
+                atributos: 'required inputmode="numeric" maxlength="9" pattern="9[0-9]{8}" data-solo-digitos data-mensaje-patron="Escribe un celular de 9 dígitos que empiece con 9."' }) %>
+        </div>
+
+        <h2 class="tarjeta-compra__subtitulo" id="titulo-direccion"><span class="tarjeta-compra__numero">2</span> Dirección de entrega</h2>
+        <div class="campo<%= errores.zonaEntregaId ? ' campo--error' : '' %>">
+          <label class="campo__etiqueta" for="zonaEntregaId">Distrito</label>
+          <select class="entrada" id="zonaEntregaId" name="zonaEntregaId" required aria-describedby="ayuda-zona error-zonaEntregaId"
+                  <%- errores.zonaEntregaId ? 'aria-invalid="true"' : '' %> data-mensaje-requerido="Elige el distrito de entrega." data-selector-distrito>
+            <option value="">Elige un distrito</option>
+            <% for (const provincia of provincias) { %>
+            <optgroup label="<%= provincia %>">
+              <% for (const zona of zonas.filter((z) => z.provincia === provincia)) { %>
+              <option value="<%= zona.id %>" data-costo="<%= zona.costo %>" <%= zona.id === zonaElegida ? 'selected' : '' %>><%= zona.distrito %> · <%= formatearPrecio(zona.costo) %></option>
+              <% } %>
+            </optgroup>
+            <% } %>
+          </select>
+          <p class="campo__ayuda" id="ayuda-zona">Costos de envío referenciales según la distancia desde nuestra tienda en Ate.</p>
+          <p class="campo__error" id="error-zonaEntregaId" data-error-de="zonaEntregaId"><%= errores.zonaEntregaId || '' %></p>
+        </div>
+        <%- include('../partials/campo-texto', { id: 'direccion', nombre: 'direccion', etiqueta: 'Dirección', valor: v('direccion'), error: errores.direccion,
+              ayuda: 'Calle, número, departamento o lote.',
+              atributos: 'required minlength="5" maxlength="200" autocomplete="street-address"' }) %>
+        <%- include('../partials/campo-texto', { id: 'referencia', nombre: 'referencia', etiqueta: 'Referencia', valor: v('referencia'), error: errores.referencia, opcional: true,
+              ayuda: 'Por ejemplo: frente al parque, puerta verde.',
+              atributos: 'maxlength="200"' }) %>
+
+        <h2 class="tarjeta-compra__subtitulo" id="titulo-fecha"><span class="tarjeta-compra__numero">3</span> Fecha y horario</h2>
+        <div class="formulario__fila">
+          <%- include('../partials/campo-texto', { id: 'fechaEntrega', nombre: 'fechaEntrega', etiqueta: 'Fecha de entrega', tipo: 'date', valor: v('fechaEntrega'), error: errores.fechaEntrega,
+                atributos: `required min="${fechaMinima}" max="${fechaMaxima}" data-mensaje-rango="Elige una fecha desde hoy y hasta dentro de 60 días."` }) %>
+          <div class="campo<%= errores.horarioEntrega ? ' campo--error' : '' %>">
+            <label class="campo__etiqueta" for="horarioEntrega">Horario</label>
+            <select class="entrada" id="horarioEntrega" name="horarioEntrega" required aria-describedby="error-horarioEntrega"
+                    <%- errores.horarioEntrega ? 'aria-invalid="true"' : '' %> data-mensaje-requerido="Elige un horario de entrega.">
+              <option value="">Elige un horario</option>
+              <% for (const horario of horarios) { %>
+              <option value="<%= horario %>" <%= v('horarioEntrega') === horario ? 'selected' : '' %>><%= horario %></option>
+              <% } %>
+            </select>
+            <p class="campo__error" id="error-horarioEntrega" data-error-de="horarioEntrega"><%= errores.horarioEntrega || '' %></p>
+          </div>
+        </div>
+
+        <h2 class="tarjeta-compra__subtitulo" id="titulo-dedicatoria"><span class="tarjeta-compra__numero">4</span> Dedicatoria</h2>
+        <div class="campo<%= errores.dedicatoria ? ' campo--error' : '' %>">
+          <label class="campo__etiqueta" for="dedicatoria">Mensaje para la tarjeta <span class="campo__opcional">(opcional)</span></label>
+          <textarea class="entrada entrada--area" id="dedicatoria" name="dedicatoria" rows="4" maxlength="300"
+                    aria-describedby="contador-dedicatoria error-dedicatoria" placeholder="¡Feliz cumpleaños! Con cariño…" data-contador="contador-dedicatoria"><%= v('dedicatoria') %></textarea>
+          <p class="campo__ayuda" id="contador-dedicatoria" aria-live="polite"><span data-contador-valor><%= String(v('dedicatoria')).length %></span>/300 caracteres. La imprimimos en una tarjeta.</p>
+          <p class="campo__error" id="error-dedicatoria" data-error-de="dedicatoria"><%= errores.dedicatoria || '' %></p>
+        </div>
+      </section>
+
+      <aside class="tarjeta-compra resumen-compra" aria-labelledby="titulo-resumen">
+        <h2 class="resumen-compra__titulo" id="titulo-resumen">Tu pedido</h2>
+        <ul class="resumen-compra__productos">
+          <% for (const item of carrito.items) { %>
+          <li>
+            <img src="<%= item.miniatura %>" alt="" width="600" height="600" loading="lazy" decoding="async">
+            <span class="resumen-compra__nombre"><%= item.nombre %> <span class="resumen-compra__cantidad">× <%= item.cantidad %></span></span>
+            <span><%= item.subtotalTexto %></span>
+          </li>
+          <% } %>
+        </ul>
+        <p class="resumen-compra__fila"><span>Subtotal</span> <strong data-subtotal="<%= carrito.subtotal %>"><%= carrito.subtotalTexto %></strong></p>
+        <p class="resumen-compra__fila"><span>Envío <span class="resumen-compra__distrito" data-distrito-elegido><%= zonaActual ? '(' + zonaActual.distrito + ')' : '' %></span></span> <strong data-envio><%= zonaActual ? formatearPrecio(zonaActual.costo) : 'Elige un distrito' %></strong></p>
+        <p class="resumen-compra__fila resumen-compra__fila--total"><span>Total</span> <strong data-total><%= formatearPrecio(carrito.subtotal + (zonaActual ? zonaActual.costo : 0)) %></strong></p>
+        <button class="boton boton--primario boton--bloque" type="submit">Continuar al pago</button>
+        <a class="boton boton--texto boton--bloque" href="/carrito">Volver al carrito</a>
+        <p class="resumen-compra__nota"><%- include('../partials/icono', { nombre: 'candado' }) %> Tus datos se usan solo para entregar tu pedido.</p>
+      </aside>
+    </form>
+  </div>
+</main>
+
+<%- include('../partials/cierre') %>

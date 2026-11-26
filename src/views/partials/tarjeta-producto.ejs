@@ -1,0 +1,26 @@
+<%# Tarjeta de producto reutilizable (catálogo, carruseles y relacionados). Parámetro: producto %>
+<article class="tarjeta-producto<%= producto.disponible ? '' : ' tarjeta-producto--agotado' %>">
+  <a class="tarjeta-producto__enlace" href="/producto/<%= producto.slug %>">
+    <div class="tarjeta-producto__imagen">
+      <img src="<%= producto.miniatura %>"
+           srcset="<%= producto.miniatura %> 600w, <%= producto.imagen %> 1080w"
+           sizes="(min-width: 1024px) 25vw, 50vw"
+           width="600" height="600" loading="lazy" decoding="async"
+           alt="<%= producto.nombre %>">
+      <% if (!producto.disponible) { %>
+      <span class="etiqueta etiqueta--agotado">Agotado</span>
+      <% } else if (producto.tieneOferta) { %>
+      <span class="etiqueta etiqueta--oferta">Oferta</span>
+      <% } %>
+    </div>
+    <div class="tarjeta-producto__contenido">
+      <h3 class="tarjeta-producto__nombre"><%= producto.nombre %></h3>
+      <p class="precio">
+        <% if (producto.tieneOferta) { %>
+        <span class="precio__anterior"><span class="oculto-visual">Antes </span><%= producto.precioRegularTexto %></span>
+        <% } %>
+        <span class="precio__actual"><%= producto.precioTexto %></span>
+      </p>
+    </div>
+  </a>
+</article>

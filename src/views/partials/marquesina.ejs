@@ -1,0 +1,14 @@
+<%# Franja de texto en desplazamiento continuo. El contenido se repite dos veces para que el bucle no tenga cortes. %>
+<% const frases = ['Flores frescas para hoy', 'Delivery a Lima y Callao', 'Dedicatoria impresa incluida', 'Fotos reales de nuestros arreglos']; %>
+<div class="marquesina">
+  <p class="oculto-visual">Flores frescas para hoy, delivery a Lima y Callao, dedicatoria impresa incluida y fotos reales de nuestros arreglos.</p>
+  <span class="marquesina__pista" aria-hidden="true">
+    <% for (let vuelta = 0; vuelta < 2; vuelta++) { %>
+    <span class="marquesina__grupo">
+      <% for (const frase of frases) { %>
+      <span class="marquesina__item"><%= frase %> <svg class="icono marquesina__icono"><use href="/img/iconos/iconos.svg#icono-logo"></use></svg></span>
+      <% } %>
+    </span>
+    <% } %>
+  </span>
+</div>

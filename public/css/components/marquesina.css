@@ -1,0 +1,51 @@
+/* Franja de texto que se desplaza sin fin */
+.marquesina {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  padding-block: 14px;
+  background: var(--degradado-primario);
+  color: var(--color-blanco);
+}
+
+.marquesina__pista {
+  display: flex;
+  width: max-content;
+  animation: desplazar-marquesina 28s linear infinite;
+}
+
+.marquesina:hover .marquesina__pista {
+  animation-play-state: paused;
+}
+
+.marquesina__grupo {
+  display: flex;
+}
+
+.marquesina__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 30px;
+  padding-right: 30px;
+  font-size: var(--texto-lg);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.marquesina__icono {
+  width: 26px;
+  height: 26px;
+  color: var(--color-blanco);
+}
+
+@media (max-width: 767px) {
+  .marquesina__pista {
+    animation-duration: 18s;
+  }
+
+  .marquesina__item {
+    font-size: var(--texto-base);
+  }
+}

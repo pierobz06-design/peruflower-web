@@ -1,0 +1,62 @@
+{
+  "name": "peruflower-web",
+  "version": "1.0.0",
+  "description": "Prototipo funcional de Peruflower.com, la tienda web de Perú Flowers (Salamanca, Ate, Lima). Proyecto EFSRT 3 - IDAT.",
+  "main": "src/server.js",
+  "private": true,
+  "type": "commonjs",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon",
+    "db:init": "node database/init.js",
+    "db:diagrama": "node scripts/generar-diagrama-er.js",
+    "db:vaciar-pedidos": "node database/vaciar-pedidos.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "keywords": [
+    "peru-flowers",
+    "floreria",
+    "express",
+    "mysql"
+  ],
+  "author": "pierobz06-design",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@fontsource/aboreto": "^5.3.0",
+    "@fontsource/quicksand": "^5.3.0",
+    "bcrypt": "^6.0.0",
+    "compression": "^1.8.2",
+    "dotenv": "^18.0.10",
+    "ejs": "^7.0.2",
+    "express": "^5.3.0",
+    "express-mysql-session": "^3.0.3",
+    "express-rate-limit": "^8.7.5",
+    "express-session": "^1.19.0",
+    "express-validator": "^7.3.2",
+    "helmet": "^8.3.0",
+    "multer": "^2.5.0",
+    "mysql2": "^3.24.6",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.15.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.14.0",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.10.1"
+  },
+  "overrides": {
+    "express-mysql-session": {
+      "mysql2": "$mysql2"
+    },
+    "uuid": "^11.1.1",
+    "minimatch": "^11.0.9"
+  }
+}

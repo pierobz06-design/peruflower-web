@@ -1,0 +1,72 @@
+<%
+  const esActiva = (ruta) => rutaActual === ruta;
+%>
+<header class="encabezado" data-encabezado>
+  <div class="encabezado__barra contenedor">
+    <div class="encabezado__izquierda">
+      <button class="encabezado__icono encabezado__hamburguesa" type="button" aria-label="Abrir menú" aria-controls="menu-movil" aria-expanded="false" data-abrir-menu>
+        <%- include('icono', { nombre: 'menu' }) %>
+      </button>
+      <p class="encabezado__aviso">
+        <%- include('icono', { nombre: 'camion' }) %>
+        Delivery los 7 días · Lima y Callao
+      </p>
+    </div>
+
+    <%- include('logo', { clase: 'encabezado__logo' }) %>
+
+    <div class="encabezado__derecha">
+      <div class="cuenta" data-desplegable>
+        <button class="encabezado__icono" type="button" aria-label="Mi cuenta" aria-haspopup="true" aria-expanded="false" aria-controls="menu-cuenta" data-desplegable-boton>
+          <%- include('icono', { nombre: 'usuario' }) %>
+        </button>
+        <div class="cuenta__menu" id="menu-cuenta" data-desplegable-menu>
+          <% if (clienteActual) { %>
+          <div class="cuenta__cabecera">
+            <strong>¡Hola, <%= clienteActual.nombre %>!</strong>
+            <span>Tu sesión está iniciada</span>
+          </div>
+          <a class="cuenta__enlace" href="/carrito">Ver mi carrito</a>
+          <form action="/salir" method="post">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button class="cuenta__enlace cuenta__enlace--salir" type="submit">Cerrar sesión</button>
+          </form>
+          <% } else { %>
+          <div class="cuenta__cabecera">
+            <strong>¡Hola!</strong>
+            <span>Ingresa para hacer tu pedido</span>
+          </div>
+          <a class="cuenta__enlace" href="/ingresar">Iniciar sesión</a>
+          <a class="cuenta__enlace" href="/registro">Crear cuenta</a>
+          <% } %>
+        </div>
+      </div>
+      <a class="encabezado__icono carrito-boton" href="/carrito" aria-label="Carrito de compras, <%= carritoCantidad %> <%= carritoCantidad === 1 ? 'producto' : 'productos' %>" aria-haspopup="dialog" data-abrir-carrito>
+        <%- include('icono', { nombre: 'carrito' }) %>
+        <span class="carrito-boton__contador" data-contador-carrito <%- carritoCantidad > 0 ? '' : 'hidden' %>><%= carritoCantidad %></span>
+      </a>
+    </div>
+  </div>
+
+  <nav class="navegacion" aria-label="Menú principal">
+    <ul class="navegacion__lista contenedor">
+      <li><a class="navegacion__enlace" href="/" <%- esActiva('/') ? 'aria-current="page"' : '' %>>Inicio</a></li>
+      <li><a class="navegacion__enlace" href="/catalogo" <%- esActiva('/catalogo') ? 'aria-current="page"' : '' %>>Catálogo</a></li>
+      <li class="navegacion__item-desplegable" data-desplegable data-desplegable-hover>
+        <button class="navegacion__enlace navegacion__boton" type="button" aria-expanded="false" aria-controls="submenu-ocasiones" data-desplegable-boton>
+          Ocasiones <%- include('icono', { nombre: 'chevron-abajo' }) %>
+        </button>
+        <ul class="submenu" id="submenu-ocasiones" data-desplegable-menu>
+          <% for (const categoria of categoriasMenu) { %>
+          <li><a class="submenu__enlace" href="<%= crearEnlaceCatalogo({ ocasion: categoria.slug }) %>"><%= categoria.nombre %></a></li>
+          <% } %>
+        </ul>
+      </li>
+      <li><a class="navegacion__enlace" href="/#como-comprar">Cómo comprar</a></li>
+      <li><a class="navegacion__enlace" href="/#nosotros">Nosotros</a></li>
+    </ul>
+  </nav>
+</header>
+
+<%- include('menu-movil') %>
+<%- include('avisos') %>

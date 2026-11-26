@@ -1,0 +1,150 @@
+<%- include('../partials/cabeza') %>
+<%- include('../partials/header') %>
+
+<main id="contenido">
+  <%# Slider principal: fundido automático cada 4 s, con pausa, flechas y puntos. %>
+  <section class="hero" data-hero data-autoplay="4000" aria-roledescription="carrusel" aria-label="Destacados de Perú Flowers">
+    <div class="hero__decoracion" aria-hidden="true"></div>
+    <div class="hero__slides">
+      <% slides.forEach((slide, indice) => { %>
+      <article class="hero__slide<%= indice === 0 ? ' es-activa' : '' %>" aria-roledescription="diapositiva" aria-label="<%= indice + 1 %> de <%= slides.length %>" <%- indice === 0 ? '' : 'aria-hidden="true"' %> data-hero-slide>
+        <div class="hero__media">
+          <%# Solo la primera foto carga al inicio; las demás las pide slider-hero.js cuando termina la carga. %>
+          <img <%- indice === 0 ? `src="${slide.imagen}" fetchpriority="high"` : `data-src="${slide.imagen}"` %>
+               alt="<%= slide.alt %>" width="736" height="1104" decoding="async">
+        </div>
+        <div class="hero__contenido contenedor">
+          <div class="hero__vidrio">
+            <p class="hero__antetitulo"><%= slide.antetitulo %></p>
+            <<%= indice === 0 ? 'h1' : 'h2' %> class="hero__titulo"><%= slide.titulo %></<%= indice === 0 ? 'h1' : 'h2' %>>
+            <p class="hero__texto"><%= slide.texto %></p>
+            <a class="boton boton--primario hero__boton" href="<%= slide.boton.enlace %>" <%- indice === 0 ? '' : 'tabindex="-1"' %>><%= slide.boton.texto %></a>
+          </div>
+        </div>
+      </article>
+      <% }) %>
+    </div>
+
+    <div class="hero__controles contenedor">
+      <button class="hero__control" type="button" aria-label="Diapositiva anterior" data-hero-anterior>
+        <%- include('../partials/icono', { nombre: 'flecha-izquierda' }) %>
+      </button>
+      <div class="hero__puntos">
+        <% slides.forEach((slide, indice) => { %>
+        <button class="hero__punto" type="button" aria-label="Ir a la diapositiva <%= indice + 1 %>" <%- indice === 0 ? 'aria-current="true"' : '' %> data-hero-punto="<%= indice %>"></button>
+        <% }) %>
+      </div>
+      <button class="hero__control" type="button" aria-label="Diapositiva siguiente" data-hero-siguiente>
+        <%- include('../partials/icono', { nombre: 'flecha-derecha' }) %>
+      </button>
+      <button class="hero__control hero__pausa" type="button" aria-label="Pausar presentación" data-hero-pausa>
+        <%- include('../partials/icono', { nombre: 'pausa', clase: 'icono-pausa' }) %>
+        <%- include('../partials/icono', { nombre: 'play', clase: 'icono-play' }) %>
+      </button>
+    </div>
+
+    <%- include('../partials/insignia-giratoria') %>
+  </section>
+
+  <%- include('../partials/marquesina') %>
+
+  <section class="seccion" aria-labelledby="titulo-favoritos">
+    <%- include('../partials/seccion-texto', {
+      frase: 'Enviar flores a domicilio en Lima y Callao es muy fácil con Perú Flowers: elige tu arreglo, escribe tu dedicatoria y nosotros lo llevamos.'
+    }) %>
+    <div class="contenedor">
+      <h2 class="titulo-seccion" id="titulo-favoritos">Nuestros favoritos</h2>
+      <%- include('../partials/carrusel-productos', { id: 'carrusel-favoritos', etiqueta: 'Nuestros favoritos', productos: destacados, autoplay: 3500 }) %>
+    </div>
+  </section>
+
+  <section class="seccion seccion--rosa" aria-labelledby="titulo-ocasiones">
+    <div class="contenedor">
+      <h2 class="titulo-seccion" id="titulo-ocasiones">Para cada ocasión, un detalle especial</h2>
+      <p class="subtitulo-seccion">Encuentra más rápido lo que buscas: elige la ocasión y te mostramos los arreglos ideales.</p>
+      <div class="carrusel carrusel--ocasiones" data-carrusel role="region" aria-roledescription="carrusel" aria-label="Ocasiones">
+        <div class="carrusel__ventana">
+          <ul class="carrusel__pista" id="carrusel-ocasiones" data-carrusel-pista>
+            <% for (const categoria of categoriasMenu) { %>
+            <li class="carrusel__item carrusel__item--ocasion">
+              <a class="tarjeta-ocasion" href="<%= crearEnlaceCatalogo({ ocasion: categoria.slug }) %>">
+                <img class="tarjeta-ocasion__imagen" src="<%= categoria.imagen %>" alt="" width="600" height="800" loading="lazy" decoding="async">
+                <span class="tarjeta-ocasion__capa">
+                  <span class="tarjeta-ocasion__titulo"><%= categoria.nombre %></span>
+                  <span class="tarjeta-ocasion__enlace"><%= categoria.totalProductos %> arreglos · Ver más</span>
+                </span>
+              </a>
+            </li>
+            <% } %>
+          </ul>
+        </div>
+        <div class="carrusel__flechas">
+          <button class="carrusel__flecha" type="button" aria-controls="carrusel-ocasiones" aria-label="Ver ocasiones anteriores" data-carrusel-anterior>
+            <%- include('../partials/icono', { nombre: 'flecha-izquierda' }) %>
+          </button>
+          <button class="carrusel__flecha" type="button" aria-controls="carrusel-ocasiones" aria-label="Ver más ocasiones" data-carrusel-siguiente>
+            <%- include('../partials/icono', { nombre: 'flecha-derecha' }) %>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="titulo-box">
+    <div class="contenedor">
+      <h2 class="titulo-seccion" id="titulo-box">Box y sombrereras</h2>
+      <p class="subtitulo-seccion">Flores en cajas de diseño, listas para regalar sin necesidad de florero.</p>
+      <%- include('../partials/carrusel-productos', { id: 'carrusel-box', etiqueta: 'Box y sombrereras', productos: boxes, autoplay: 4000 }) %>
+    </div>
+  </section>
+
+  <section class="seccion seccion--crema" aria-labelledby="titulo-condolencias">
+    <%- include('../partials/seccion-texto', {
+      frase: 'En los momentos difíciles también te acompañamos. Coronas, mantos y lágrimas preparados con respeto y entregados a tiempo.'
+    }) %>
+    <div class="contenedor">
+      <h2 class="titulo-seccion" id="titulo-condolencias">Condolencias</h2>
+      <%- include('../partials/carrusel-productos', { id: 'carrusel-condolencias', etiqueta: 'Condolencias', productos: condolencias }) %>
+    </div>
+  </section>
+
+  <section class="seccion como-comprar" id="como-comprar" aria-labelledby="titulo-como-comprar">
+    <div class="contenedor">
+      <h2 class="titulo-seccion" id="titulo-como-comprar">Comprar en Perú Flowers es simple</h2>
+      <p class="subtitulo-seccion">Tu pedido en tres pasos, desde tu celular o computadora.</p>
+      <ol class="como-comprar__pasos">
+        <% pasosCompra.forEach((paso, indice) => { %>
+        <li class="paso-compra">
+          <span class="paso-compra__numero" aria-hidden="true"><%= indice + 1 %></span>
+          <span class="paso-compra__icono"><%- include('../partials/icono', { nombre: paso.icono }) %></span>
+          <h3 class="paso-compra__titulo"><%= paso.titulo %></h3>
+          <p class="paso-compra__texto"><%= paso.texto %></p>
+        </li>
+        <% }) %>
+      </ol>
+    </div>
+  </section>
+
+  <section class="seccion nosotros" id="nosotros" aria-labelledby="titulo-nosotros">
+    <div class="contenedor nosotros__contenido">
+      <div class="nosotros__imagen">
+        <img src="/img/banners/floreria-salamanca.webp" alt="Ramos de astromelias, crisantemos y lilas envueltos en papel" width="736" height="981" loading="lazy" decoding="async">
+      </div>
+      <div class="nosotros__texto">
+        <p class="hero__antetitulo">Florería Perú Flowers</p>
+        <h2 class="titulo-seccion titulo-seccion--izquierda" id="titulo-nosotros">Una florería familiar con atención de casa</h2>
+        <p>Desde Salamanca de Monterrico, en Ate, preparamos ramos, arreglos y coronas para cumpleaños, aniversarios, el Día de la Madre y los momentos que más importan.</p>
+        <p>Nuestro sello es la atención personalizada: si no sabes qué elegir, te orientamos según la ocasión y tu presupuesto.</p>
+        <ul class="nosotros__datos">
+          <li><%- include('../partials/icono', { nombre: 'ubicacion' }) %> <%= negocio.direccion %></li>
+          <li><%- include('../partials/icono', { nombre: 'reloj' }) %> <%= negocio.coberturaEntrega %></li>
+        </ul>
+        <a class="boton boton--whatsapp" href="<%= enlaceWhatsapp %>" target="_blank" rel="noopener">
+          <%- include('../partials/icono', { nombre: 'whatsapp' }) %> Pedir asesoría por WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/cierre') %>

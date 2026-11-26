@@ -1,0 +1,37 @@
+<%- include('../partials/cabeza') %>
+<%- include('../partials/header') %>
+
+<main id="contenido" class="pagina-legal">
+  <article class="contenedor pagina-legal__contenido">
+    <h1 class="pagina-legal__titulo">Política de privacidad</h1>
+    <p class="pagina-legal__actualizacion">Prototipo académico de Peruflower.com. Texto de referencia para validar con el negocio.</p>
+
+    <h2>1. ¿Quién es responsable de tus datos?</h2>
+    <p>Perú Flowers, florería ubicada en <%= negocio.direccion %>, es responsable del tratamiento de los datos personales que registras en esta página, conforme a la Ley N.° 29733, Ley de Protección de Datos Personales, y su reglamento.</p>
+
+    <h2>2. ¿Qué datos recopilamos?</h2>
+    <ul>
+      <li>Datos de tu cuenta: nombres, apellidos, correo electrónico y celular.</li>
+      <li>Datos de entrega: nombre y celular de quien recibe, distrito, dirección, referencia, fecha, horario y dedicatoria.</li>
+      <li>Datos del pago: método elegido y, según el caso, el número de operación o solo los últimos 4 dígitos de la tarjeta. Nunca guardamos el número completo de tu tarjeta ni su código de seguridad.</li>
+    </ul>
+
+    <h2>3. ¿Para qué los usamos?</h2>
+    <ul>
+      <li>Registrar, preparar y entregar tus pedidos.</li>
+      <li>Comunicarnos contigo o con quien recibe el arreglo para coordinar la entrega.</li>
+      <li>Enviarte promociones por correo, <strong>solo si lo autorizaste</strong> al registrarte (Ley N.° 28493). Puedes retirar tu autorización cuando quieras.</li>
+    </ul>
+
+    <h2>4. ¿Con quién los compartimos?</h2>
+    <p>Solo con el personal de Perú Flowers que prepara y entrega tu pedido. No vendemos ni cedemos tus datos a terceros.</p>
+
+    <h2>5. ¿Cómo los protegemos?</h2>
+    <p>Tu contraseña se guarda cifrada, la información viaja por una conexión segura (HTTPS en el servidor final) y solo el personal autorizado accede al panel de pedidos.</p>
+
+    <h2>6. Tus derechos</h2>
+    <p>Puedes solicitar el acceso, rectificación, cancelación u oposición al uso de tus datos (derechos ARCO) escribiéndonos por <a class="enlace" href="<%= enlaceWhatsapp %>" target="_blank" rel="noopener">WhatsApp</a> o acercándote a nuestra tienda.</p>
+  </article>
+</main>
+
+<%- include('../partials/cierre') %>

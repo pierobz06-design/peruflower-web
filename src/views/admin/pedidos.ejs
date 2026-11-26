@@ -1,0 +1,83 @@
+<%- include('partials/cabeza') %>
+<div class="admin-distribucion">
+  <%- include('partials/barra') %>
+  <main id="contenido" class="admin-contenido">
+    <div class="admin-cabecera">
+      <div>
+        <h1 class="admin-titulo">Pedidos</h1>
+        <p class="admin-subtitulo">Filtra por estado y fecha, revisa el detalle y actualiza el estado de cada pedido.</p>
+      </div>
+    </div>
+
+    <form class="admin-tarjeta admin-filtros-pedidos" action="/admin/pedidos" method="get" data-filtros-pedidos>
+      <div class="campo">
+        <label class="campo__etiqueta" for="filtro-estado">Estado</label>
+        <select class="entrada" id="filtro-estado" name="estado" data-envio-automatico>
+          <option value="">Todos</option>
+          <% for (const estado of estados) { %>
+          <option value="<%= estado %>" <%= filtros.estado === estado ? 'selected' : '' %>><%= estado %></option>
+          <% } %>
+        </select>
+      </div>
+      <div class="campo">
+        <label class="campo__etiqueta" for="filtro-tipo-fecha">Filtrar fecha por</label>
+        <select class="entrada" id="filtro-tipo-fecha" name="tipoFecha">
+          <option value="pedido" <%= filtros.tipoFecha === 'pedido' ? 'selected' : '' %>>Fecha del pedido</option>
+          <option value="entrega" <%= filtros.tipoFecha === 'entrega' ? 'selected' : '' %>>Fecha de entrega</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label class="campo__etiqueta" for="filtro-desde">Desde</label>
+        <input class="entrada" id="filtro-desde" type="date" name="desde" value="<%= filtros.desde || '' %>">
+      </div>
+      <div class="campo">
+        <label class="campo__etiqueta" for="filtro-hasta">Hasta</label>
+        <input class="entrada" id="filtro-hasta" type="date" name="hasta" value="<%= filtros.hasta || '' %>">
+      </div>
+      <div class="campo admin-filtros-pedidos__buscar">
+        <label class="campo__etiqueta" for="filtro-buscar">Buscar</label>
+        <input class="entrada" id="filtro-buscar" type="search" name="buscar" value="<%= filtros.buscar || '' %>" maxlength="60" placeholder="Código, cliente o quien recibe">
+      </div>
+      <div class="admin-filtros-pedidos__acciones">
+        <button class="boton boton--primario" type="submit">Filtrar</button>
+        <% if (hayFiltros) { %><a class="boton boton--texto" href="/admin/pedidos">Limpiar</a><% } %>
+      </div>
+    </form>
+
+    <section class="admin-tarjeta" aria-label="Lista de pedidos">
+      <p class="admin-total"><%= total %> <%= total === 1 ? 'pedido' : 'pedidos' %></p>
+      <% if (pedidos.length === 0) { %>
+      <p class="admin-vacio">No hay pedidos con esos filtros.</p>
+      <% } else { %>
+      <div class="tabla-desplazable">
+        <table class="tabla">
+          <thead>
+            <tr><th scope="col">Pedido</th><th scope="col">Registrado</th><th scope="col">Cliente / recibe</th><th scope="col">Entrega</th><th scope="col">Total</th><th scope="col">Pago</th><th scope="col">Estado</th></tr>
+          </thead>
+          <tbody>
+            <% for (const p of pedidos) { %>
+            <tr>
+              <td><a class="enlace" href="/admin/pedidos/<%= p.codigo %>"><%= p.codigo %></a></td>
+              <td><span class="tabla__secundario"><%= p.created_at.slice(0, 16) %></span></td>
+              <td><%= p.cliente %><span class="tabla__secundario">Recibe: <%= p.receptor_nombre %></span></td>
+              <td><%= p.fechaEntregaTexto %><span class="tabla__secundario"><%= p.distrito %> · <%= p.horario_entrega %></span></td>
+              <td><strong><%= p.totalTexto %></strong></td>
+              <td><%= p.metodoPagoTexto %></td>
+              <td><%- include('../partials/estado', { estado: p.estado }) %></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      <% if (paginas > 1) { %>
+      <nav class="paginacion" aria-label="Páginas">
+        <% for (let numero = 1; numero <= paginas; numero++) { %>
+        <a class="paginacion__enlace<%= numero === pagina ? ' es-activo' : '' %>" href="<%= enlacePagina(numero) %>" <%- numero === pagina ? 'aria-current="page"' : '' %>><%= numero %></a>
+        <% } %>
+      </nav>
+      <% } %>
+      <% } %>
+    </section>
+  </main>
+</div>
+<%- include('partials/cierre') %>

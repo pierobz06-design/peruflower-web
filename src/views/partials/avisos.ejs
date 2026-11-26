@@ -1,0 +1,17 @@
+<%# Avisos emergentes. El del servidor (por ejemplo "Tu cuenta fue creada") llega en "aviso"; JS usa la plantilla. %>
+<div class="avisos" data-avisos aria-live="polite" role="status">
+  <% if (typeof aviso !== 'undefined' && aviso) { %>
+  <div class="aviso aviso--<%= aviso.tipo %>" data-aviso>
+    <%- include('icono', { nombre: { error: 'cerrar', info: 'flor' }[aviso.tipo] || 'check', clase: 'aviso__icono' }) %>
+    <p class="aviso__texto"><%= aviso.texto %></p>
+    <button class="aviso__cerrar" type="button" aria-label="Cerrar aviso" data-cerrar-aviso><%- include('icono', { nombre: 'cerrar' }) %></button>
+  </div>
+  <% } %>
+</div>
+<template id="plantilla-aviso">
+  <div class="aviso" data-aviso>
+    <%- include('icono', { nombre: 'check', clase: 'aviso__icono' }) %>
+    <p class="aviso__texto" data-aviso-texto></p>
+    <button class="aviso__cerrar" type="button" aria-label="Cerrar aviso" data-cerrar-aviso><%- include('icono', { nombre: 'cerrar' }) %></button>
+  </div>
+</template>

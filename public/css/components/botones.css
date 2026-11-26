@@ -1,0 +1,172 @@
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 12px 28px;
+  border: 2px solid transparent;
+  border-radius: var(--radio-pildora);
+  font-weight: 700;
+  font-size: var(--texto-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    transform var(--duracion) var(--curva),
+    box-shadow var(--duracion) var(--curva),
+    background var(--duracion) var(--curva),
+    color var(--duracion) var(--curva),
+    border-color var(--duracion) var(--curva);
+}
+
+.boton .icono {
+  width: 1.3em;
+  height: 1.3em;
+}
+
+.boton:hover {
+  transform: translateY(-2px);
+}
+
+.boton:active {
+  transform: translateY(0);
+}
+
+.boton--primario {
+  background: var(--degradado-primario);
+  color: var(--color-blanco);
+  box-shadow: var(--sombra-primario);
+}
+
+.boton--primario:hover {
+  background: var(--degradado-primario-hover);
+  box-shadow: 0 8px 25px rgba(214, 40, 40, 0.5);
+}
+
+.boton--contorno {
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+  background: transparent;
+}
+
+.boton--contorno:hover {
+  background: var(--color-primario);
+  color: var(--color-blanco);
+}
+
+.boton--blanco {
+  background: var(--color-blanco);
+  color: var(--color-primario);
+}
+
+.boton--blanco:hover {
+  background: transparent;
+  border-color: var(--color-blanco);
+  color: var(--color-blanco);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+}
+
+.boton--whatsapp {
+  background: var(--color-whatsapp-oscuro);
+  color: var(--color-blanco);
+  box-shadow: 0 6px 20px rgba(15, 122, 64, 0.3);
+}
+
+.boton--whatsapp:hover {
+  background: #0b6334;
+  box-shadow: 0 8px 25px rgba(15, 122, 64, 0.45);
+}
+
+.boton--texto {
+  min-height: 40px;
+  color: var(--color-texto-suave);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.boton--texto:hover {
+  color: var(--color-primario);
+  transform: none;
+}
+
+.boton--bloque {
+  width: 100%;
+}
+
+/* Botón redondo de cerrar: gira al pasar el mouse */
+.boton-cerrar {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-rosa-50);
+  color: var(--color-tinta);
+  transition:
+    transform var(--duracion) var(--curva),
+    background var(--duracion) var(--curva),
+    color var(--duracion) var(--curva);
+}
+
+.boton-cerrar:hover {
+  background: var(--color-primario);
+  color: var(--color-blanco);
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* Chips (filtros y ocasiones) */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 1.5px solid var(--color-rosa-200);
+  border-radius: var(--radio-pildora);
+  background: var(--color-blanco);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  transition:
+    background var(--duracion-rapida),
+    border-color var(--duracion-rapida),
+    color var(--duracion-rapida),
+    transform var(--duracion-rapida);
+}
+
+.chip:hover {
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+  transform: translateY(-1px);
+}
+
+.chip.es-activo {
+  border-color: var(--color-primario);
+  background: var(--color-primario);
+  color: var(--color-blanco);
+}
+
+.chip--suave {
+  background: var(--color-rosa-50);
+  color: var(--color-primario-oscuro);
+}
+
+.chip--quitar .icono {
+  width: 1em;
+  height: 1em;
+}
+
+.boton.esta-deshabilitado,
+.boton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

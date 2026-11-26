@@ -1,0 +1,95 @@
+/* Carrusel genérico (productos y ocasiones). El desplazamiento lo controla js/components/carrusel.js */
+.carrusel {
+  --visibles: 2;
+  --espacio: 8px;
+  position: relative;
+}
+
+.carrusel__ventana {
+  overflow: hidden;
+  padding-block: 10px 6px;
+  touch-action: pan-y;
+}
+
+.carrusel__pista {
+  display: flex;
+  gap: var(--espacio);
+  transition: transform var(--duracion-lenta) ease;
+  will-change: transform;
+}
+
+.carrusel.es-arrastrando .carrusel__pista {
+  transition: none;
+}
+
+.carrusel__item {
+  flex: 0 0 calc((100% - (var(--visibles) - 1) * var(--espacio)) / var(--visibles));
+  min-width: 0;
+}
+
+.carrusel__flechas {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.carrusel__flecha {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--color-primario);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition:
+    transform var(--duracion-rapida) ease,
+    box-shadow var(--duracion-rapida) ease,
+    background var(--duracion-rapida) ease,
+    color var(--duracion-rapida) ease,
+    opacity var(--duracion-rapida) ease;
+}
+
+.carrusel__flecha:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: var(--color-primario);
+  color: var(--color-blanco);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.15);
+}
+
+.carrusel__flecha:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Si todos los elementos caben, no se muestran flechas */
+.carrusel.sin-desplazamiento .carrusel__flechas {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .carrusel {
+    --espacio: 10px;
+  }
+
+  .carrusel__flechas {
+    justify-content: flex-end;
+    padding-right: 24px;
+  }
+
+  .carrusel__flecha {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .carrusel {
+    --visibles: 4;
+  }
+
+  .carrusel--ocasiones {
+    --visibles: 3;
+  }
+}

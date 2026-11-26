@@ -1,0 +1,23 @@
+<%# Resumen completo de un pedido (pago y confirmación). Parámetro: pedido (formateado por formatearPedido) %>
+<div class="resumen-pedido">
+  <ul class="resumen-compra__productos">
+    <% for (const linea of pedido.detalle) { %>
+    <li>
+      <img src="<%= linea.miniatura %>" alt="" width="600" height="600" loading="lazy" decoding="async">
+      <span class="resumen-compra__nombre"><%= linea.nombre_producto %> <span class="resumen-compra__cantidad">× <%= linea.cantidad %></span></span>
+      <span><%= linea.subtotalTexto %></span>
+    </li>
+    <% } %>
+  </ul>
+  <p class="resumen-compra__fila"><span>Subtotal</span> <strong><%= pedido.subtotalTexto %></strong></p>
+  <p class="resumen-compra__fila"><span>Envío (<%= pedido.distrito %>)</span> <strong><%= pedido.costoEnvioTexto %></strong></p>
+  <p class="resumen-compra__fila resumen-compra__fila--total"><span>Total</span> <strong><%= pedido.totalTexto %></strong></p>
+
+  <dl class="datos-entrega">
+    <div><dt>Recibe</dt><dd><%= pedido.receptor_nombre %> · <%= pedido.receptor_telefono %></dd></div>
+    <div><dt>Dirección</dt><dd><%= pedido.direccion %>, <%= pedido.distrito %> (<%= pedido.provincia %>)</dd></div>
+    <% if (pedido.referencia) { %><div><dt>Referencia</dt><dd><%= pedido.referencia %></dd></div><% } %>
+    <div><dt>Entrega</dt><dd><%= pedido.fechaEntregaTexto %> · <%= pedido.horario_entrega %></dd></div>
+    <% if (pedido.dedicatoria) { %><div><dt>Dedicatoria</dt><dd class="datos-entrega__dedicatoria"><%= pedido.dedicatoria %></dd></div><% } %>
+  </dl>
+</div>

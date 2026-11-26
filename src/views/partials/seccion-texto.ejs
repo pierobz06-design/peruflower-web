@@ -1,0 +1,8 @@
+<%# Bloque de frase centrada con separador y botón opcional. Parámetros: frase, boton { texto, enlace } %>
+<div class="seccion-texto contenedor">
+  <p class="seccion-texto__frase"><%= frase %></p>
+  <span class="separador" aria-hidden="true"></span>
+  <% if (typeof boton !== 'undefined' && boton) { %>
+  <a class="boton boton--contorno" href="<%= boton.enlace %>"><%= boton.texto %></a>
+  <% } %>
+</div>

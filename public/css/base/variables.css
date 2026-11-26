@@ -1,0 +1,62 @@
+/* Variables de diseño de Perú Flowers (colores basados en peruflowers.com.pe) */
+:root {
+  /* Colores de marca */
+  --color-primario: #d62828;
+  --color-primario-oscuro: #b01e23;
+  --color-primario-suave: rgba(214, 40, 40, 0.1);
+  --degradado-primario: linear-gradient(135deg, #d62828 0%, #b01e23 100%);
+  --degradado-primario-hover: linear-gradient(135deg, #b01e23 0%, #921a1e 100%);
+  --color-tinta: #111821;
+  --color-texto: #2b2f36;
+  --color-texto-suave: #5d6470;
+  --color-rosa-50: #fff5f6;
+  --color-rosa-100: #ffe8ee;
+  --color-rosa-200: #f3d6d9;
+  --color-crema: #fffaf2;
+  --color-blanco: #ffffff;
+  --color-borde: #ece4e5;
+  --color-gris-fondo: #fafafa;
+  --color-acento: #ffd166;
+  --color-whatsapp: #1fa855;
+  --color-whatsapp-oscuro: #0f7a40;
+  --color-exito: #1e7b45;
+  --color-error: #b3261e;
+
+  /* Tipografía */
+  --fuente-titulos: 'Aboreto', 'Georgia', serif;
+  --fuente-texto: 'Quicksand', 'Segoe UI', system-ui, sans-serif;
+  --texto-xs: 0.8125rem;
+  --texto-sm: 0.9375rem;
+  --texto-base: 1rem;
+  --texto-lg: 1.125rem;
+  --texto-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --texto-2xl: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
+  --texto-3xl: clamp(1.875rem, 1.3rem + 2.4vw, 3.25rem);
+
+  /* Espacios y medidas */
+  --ancho-maximo: 1280px;
+  --margen-lateral: clamp(16px, 4vw, 40px);
+  --espacio-seccion: clamp(56px, 7vw, 96px);
+  --radio-sm: 12px;
+  --radio-md: 20px;
+  --radio-lg: 32px;
+  --radio-xl: 36px;
+  --radio-pildora: 999px;
+
+  /* Sombras */
+  --sombra-suave: 0 4px 12px rgba(17, 24, 33, 0.08);
+  --sombra-media: 0 10px 30px rgba(17, 24, 33, 0.1);
+  --sombra-fuerte: 0 25px 80px rgba(17, 24, 33, 0.2);
+  --sombra-primario: 0 6px 20px rgba(214, 40, 40, 0.35);
+
+  /* Movimiento */
+  --curva: cubic-bezier(0.4, 0, 0.2, 1);
+  --duracion-rapida: 0.2s;
+  --duracion: 0.3s;
+  --duracion-lenta: 0.45s;
+
+  /* Capas */
+  --capa-header: 1000;
+  --capa-whatsapp: 1500;
+  --capa-panel: 9000;
+}

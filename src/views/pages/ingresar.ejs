@@ -1,0 +1,32 @@
+<%- include('../partials/cabeza') %>
+<%- include('../partials/header') %>
+
+<main id="contenido" class="pagina-cuenta">
+  <div class="contenedor pagina-cuenta__contenido">
+    <div class="pagina-cuenta__imagen" aria-hidden="true">
+      <img src="/img/banners/ramos-de-temporada.webp" alt="" width="736" height="920" loading="lazy" decoding="async">
+      <p class="pagina-cuenta__frase">Tus flores favoritas, a un clic de distancia.</p>
+    </div>
+
+    <section class="tarjeta-formulario" aria-labelledby="titulo-ingresar">
+      <h1 class="tarjeta-formulario__titulo" id="titulo-ingresar">Iniciar sesión</h1>
+      <p class="tarjeta-formulario__texto">¿Aún no tienes cuenta? <a class="enlace" href="/registro<%= volver !== '/' ? '?volver=' + encodeURIComponent(volver) : '' %>">Créala aquí</a></p>
+
+      <% if (errores.general) { %>
+      <p class="alerta alerta--error" role="alert"><%= errores.general %></p>
+      <% } %>
+
+      <form class="formulario" action="/ingresar" method="post" novalidate data-validar>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="volver" value="<%= volver %>">
+        <%- include('../partials/campo-texto', { id: 'email', nombre: 'email', etiqueta: 'Correo electrónico', tipo: 'email', valor: valores.email || '', error: errores.email,
+              atributos: 'required maxlength="160" autocomplete="email" inputmode="email"' }) %>
+        <%- include('../partials/campo-texto', { id: 'password', nombre: 'password', etiqueta: 'Contraseña', tipo: 'password', error: errores.password,
+              atributos: 'required maxlength="72" autocomplete="current-password" data-mostrar-clave' }) %>
+        <button class="boton boton--primario boton--bloque" type="submit">Ingresar</button>
+      </form>
+    </section>
+  </div>
+</main>
+
+<%- include('../partials/cierre') %>

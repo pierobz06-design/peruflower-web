@@ -1,0 +1,48 @@
+/* Insignia circular que gira en bucle sobre el banner (solo en computadora) */
+.insignia-giratoria {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .insignia-giratoria {
+    position: absolute;
+    right: calc(min(42%, 460px) + var(--margen-lateral) - 70px);
+    bottom: 70px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: var(--color-blanco);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+  }
+
+  .insignia-giratoria__texto {
+    position: absolute;
+    inset: 6px;
+    width: calc(100% - 12px);
+    height: calc(100% - 12px);
+    animation: girar 10s linear infinite;
+  }
+
+  .insignia-giratoria__texto text {
+    fill: var(--color-primario);
+    font-family: var(--fuente-texto);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .insignia-giratoria__centro {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .insignia-giratoria {
+    right: calc((100vw - var(--ancho-maximo)) / 2 + var(--margen-lateral) + min(42%, 460px) - 70px);
+  }
+}

@@ -1,0 +1,108 @@
+.pie {
+  background: var(--color-tinta);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.pie__contenido {
+  display: grid;
+  gap: 40px;
+  padding-block: 64px 48px;
+}
+
+/* El logo oficial tiene texto oscuro: en el pie va sobre una tarjeta blanca */
+.logo--claro {
+  padding: 12px 18px;
+  border-radius: var(--radio-md);
+  background: var(--color-blanco);
+}
+
+.logo--claro .logo__imagen {
+  height: 56px;
+}
+
+.pie__texto {
+  margin: 18px 0 20px;
+  max-width: 360px;
+  font-size: var(--texto-sm);
+}
+
+.pie__redes {
+  display: flex;
+  gap: 10px;
+}
+
+.pie__red {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  color: var(--color-blanco);
+  transition:
+    background var(--duracion),
+    border-color var(--duracion),
+    transform var(--duracion);
+}
+
+.pie__red:hover {
+  background: var(--color-primario);
+  border-color: var(--color-primario);
+  transform: translateY(-3px);
+}
+
+.pie__titulo {
+  margin-bottom: 18px;
+  color: var(--color-blanco);
+  font-size: var(--texto-lg);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pie__lista {
+  display: grid;
+  gap: 10px;
+  font-size: var(--texto-sm);
+}
+
+.pie__lista a {
+  transition: color var(--duracion);
+}
+
+.pie__lista a:hover {
+  color: var(--color-acento);
+}
+
+.pie__lista--iconos li {
+  display: flex;
+  gap: 10px;
+}
+
+.pie__lista--iconos .icono {
+  margin-top: 2px;
+  color: var(--color-acento);
+}
+
+.pie__legal {
+  padding-block: 18px 90px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: var(--texto-xs);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .pie__contenido {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pie__legal {
+    padding-bottom: 18px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pie__contenido {
+    grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
+  }
+}

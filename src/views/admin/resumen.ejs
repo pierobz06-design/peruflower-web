@@ -1,0 +1,61 @@
+<%- include('partials/cabeza') %>
+<div class="admin-distribucion">
+  <%- include('partials/barra') %>
+  <main id="contenido" class="admin-contenido">
+    <div class="admin-cabecera">
+      <div>
+        <h1 class="admin-titulo">Hola, <%= adminActual.nombre %></h1>
+        <p class="admin-subtitulo">Así van los pedidos y el catálogo de Perú Flowers.</p>
+      </div>
+      <a class="boton boton--primario" href="/admin/productos/nuevo">+ Nuevo producto</a>
+    </div>
+
+    <ul class="admin-indicadores">
+      <li class="admin-indicador admin-indicador--pendiente">
+        <a href="/admin/pedidos?estado=Pendiente"><span>Pedidos pendientes</span><strong><%= pedidos.Pendiente %></strong></a>
+      </li>
+      <li class="admin-indicador admin-indicador--pagado">
+        <a href="/admin/pedidos?estado=Pagado"><span>Pagados por entregar</span><strong><%= pedidos.Pagado %></strong></a>
+      </li>
+      <li class="admin-indicador admin-indicador--entregado">
+        <a href="/admin/pedidos?estado=Entregado"><span>Entregados</span><strong><%= pedidos.Entregado %></strong></a>
+      </li>
+      <li class="admin-indicador">
+        <a href="/admin/pedidos"><span>Cobrado (pagados y entregados)</span><strong><%= montoCobradoTexto %></strong></a>
+      </li>
+      <li class="admin-indicador">
+        <a href="/admin/productos?ver=visibles"><span>Productos visibles</span><strong><%= productos.visibles %></strong></a>
+      </li>
+      <li class="admin-indicador">
+        <a href="/admin/productos?ver=ocultos"><span>Productos ocultos</span><strong><%= productos.ocultos %></strong></a>
+      </li>
+    </ul>
+
+    <section class="admin-tarjeta" aria-labelledby="titulo-ultimos">
+      <div class="admin-tarjeta__cabecera">
+        <h2 id="titulo-ultimos">Últimos pedidos</h2>
+        <a class="enlace" href="/admin/pedidos">Ver todos</a>
+      </div>
+      <% if (ultimosPedidos.length === 0) { %>
+      <p class="admin-vacio">Todavía no hay pedidos.</p>
+      <% } else { %>
+      <div class="tabla-desplazable">
+        <table class="tabla">
+          <thead><tr><th scope="col">Pedido</th><th scope="col">Cliente</th><th scope="col">Entrega</th><th scope="col">Estado</th></tr></thead>
+          <tbody>
+            <% for (const p of ultimosPedidos) { %>
+            <tr>
+              <td><a class="enlace" href="/admin/pedidos/<%= p.codigo %>"><%= p.codigo %></a></td>
+              <td><%= p.cliente %></td>
+              <td><%= p.fecha_entrega %> · <%= p.distrito %></td>
+              <td><%- include('../partials/estado', { estado: p.estado }) %></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </section>
+  </main>
+</div>
+<%- include('partials/cierre') %>

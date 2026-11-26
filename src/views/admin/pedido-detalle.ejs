@@ -1,0 +1,94 @@
+<%- include('partials/cabeza') %>
+<div class="admin-distribucion">
+  <%- include('partials/barra') %>
+  <main id="contenido" class="admin-contenido">
+    <div class="admin-cabecera">
+      <div>
+        <a class="enlace" href="/admin/pedidos">← Volver a pedidos</a>
+        <h1 class="admin-titulo">Pedido <%= pedido.codigo %> <%- include('../partials/estado', { estado: pedido.estado }) %></h1>
+        <p class="admin-subtitulo">Registrado el <%= pedido.created_at.slice(0, 16) %> · Última actualización <%= pedido.updated_at.slice(0, 16) %></p>
+      </div>
+    </div>
+
+    <div class="admin-detalle">
+      <div class="admin-detalle__principal">
+        <section class="admin-tarjeta" aria-labelledby="titulo-productos">
+          <h2 id="titulo-productos">Productos</h2>
+          <ul class="admin-productos-pedido">
+            <% for (const linea of pedido.detalle) { %>
+            <li>
+              <img src="<%= linea.miniatura %>" alt="" width="600" height="600" loading="lazy" decoding="async">
+              <span><strong><%= linea.nombre_producto %></strong><span class="tabla__secundario">SKU <%= linea.sku %> · <%= linea.precioTexto %> c/u</span></span>
+              <span class="admin-productos-pedido__cantidad">× <%= linea.cantidad %></span>
+              <strong><%= linea.subtotalTexto %></strong>
+            </li>
+            <% } %>
+          </ul>
+          <dl class="admin-montos">
+            <div><dt>Subtotal</dt><dd><%= pedido.subtotalTexto %></dd></div>
+            <div><dt>Envío (<%= pedido.distrito %>)</dt><dd><%= pedido.costoEnvioTexto %></dd></div>
+            <div class="admin-montos__total"><dt>Total</dt><dd><%= pedido.totalTexto %></dd></div>
+          </dl>
+        </section>
+
+        <section class="admin-tarjeta" aria-labelledby="titulo-entrega">
+          <h2 id="titulo-entrega">Entrega</h2>
+          <dl class="admin-datos">
+            <div><dt>Recibe</dt><dd><%= pedido.receptor_nombre %></dd></div>
+            <div><dt>Celular</dt><dd><a class="enlace" href="tel:+51<%= pedido.receptor_telefono %>"><%= pedido.receptor_telefono %></a></dd></div>
+            <div><dt>Distrito</dt><dd><%= pedido.distrito %> (<%= pedido.provincia %>)</dd></div>
+            <div><dt>Dirección</dt><dd><%= pedido.direccion %></dd></div>
+            <div><dt>Referencia</dt><dd><%= pedido.referencia || '—' %></dd></div>
+            <div><dt>Fecha</dt><dd><%= pedido.fechaEntregaTexto %></dd></div>
+            <div><dt>Horario</dt><dd><%= pedido.horario_entrega %></dd></div>
+            <div class="admin-datos__ancho"><dt>Dedicatoria</dt><dd class="admin-dedicatoria"><%= pedido.dedicatoria || 'Sin dedicatoria' %></dd></div>
+          </dl>
+        </section>
+      </div>
+
+      <aside class="admin-detalle__lateral">
+        <section class="admin-tarjeta" aria-labelledby="titulo-estado">
+          <h2 id="titulo-estado">Cambiar estado</h2>
+          <form class="formulario" action="/admin/pedidos/<%= pedido.codigo %>/estado" method="post">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <fieldset class="opciones-estado">
+              <legend class="oculto-visual">Nuevo estado</legend>
+              <% for (const estado of estados) { %>
+              <label class="opcion-estado opcion-estado--<%= estado.toLowerCase() %>">
+                <input type="radio" name="estado" value="<%= estado %>" <%= pedido.estado === estado ? 'checked' : '' %>>
+                <span><%= estado %></span>
+              </label>
+              <% } %>
+            </fieldset>
+            <button class="boton boton--primario boton--bloque" type="submit">Guardar estado</button>
+          </form>
+        </section>
+
+        <section class="admin-tarjeta" aria-labelledby="titulo-pago">
+          <h2 id="titulo-pago">Pago</h2>
+          <dl class="admin-datos admin-datos--simple">
+            <div><dt>Método</dt><dd><%= pedido.metodoPagoTexto %></dd></div>
+            <% if (pedido.codigo_operacion) { %><div><dt>N.° de operación</dt><dd><%= pedido.codigo_operacion %></dd></div><% } %>
+            <% if (pedido.tarjeta_ultimos4) { %><div><dt>Tarjeta</dt><dd>•••• <%= pedido.tarjeta_ultimos4 %></dd></div><% } %>
+          </dl>
+          <% if (pedido.metodo_pago === 'yape' || pedido.metodo_pago === 'plin') { %>
+          <p class="campo__ayuda">Verifica el número de operación en la app antes de marcarlo como Pagado.</p>
+          <% } %>
+        </section>
+
+        <section class="admin-tarjeta" aria-labelledby="titulo-cliente">
+          <h2 id="titulo-cliente">Cliente</h2>
+          <dl class="admin-datos admin-datos--simple">
+            <div><dt>Nombre</dt><dd><%= pedido.cliente_nombres %> <%= pedido.cliente_apellidos %></dd></div>
+            <div><dt>Correo</dt><dd><a class="enlace" href="mailto:<%= pedido.cliente_email %>"><%= pedido.cliente_email %></a></dd></div>
+            <div><dt>Celular</dt><dd><%= pedido.cliente_telefono %></dd></div>
+          </dl>
+          <a class="boton boton--whatsapp boton--bloque" href="<%= enlaceCliente %>" target="_blank" rel="noopener">
+            <%- include('../partials/icono', { nombre: 'whatsapp' }) %> Escribir al cliente
+          </a>
+        </section>
+      </aside>
+    </div>
+  </main>
+</div>
+<%- include('partials/cierre') %>
